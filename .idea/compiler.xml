@@ -9,5 +9,8 @@
         <module name="Pride_Bot" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Pride-bot" target="18" />
+    </bytecodeTargetLevel>
   </component>
 </project>
