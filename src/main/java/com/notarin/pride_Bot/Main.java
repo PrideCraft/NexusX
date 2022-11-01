@@ -26,6 +26,7 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) {
+        //TODO implement secure token storage
         JDA jda = JDABuilder.createLight("BOT_TOKEN_HERE", EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
                 .addEventListeners(new Main()).build();
 
