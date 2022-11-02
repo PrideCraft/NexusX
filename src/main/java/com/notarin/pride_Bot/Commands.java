@@ -11,11 +11,13 @@ public class Commands {
     }
 
     public static void leave(SlashCommandInteractionEvent event) {
-        if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.KICK_MEMBERS))
+        if (Objects.requireNonNull(event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
+            event.reply("Leaving the server... :wave:")
+                    .flatMap(v -> Objects.requireNonNull(event.getGuild()).leave()) // Leave server after acknowledging the command
+                    .queue();
+        } else {
             event.reply("You do not have permissions to kick me.").setEphemeral(true).queue();
-        else event.reply("Leaving the server... :wave:")
-                .flatMap(v -> Objects.requireNonNull(event.getGuild()).leave()) // Leave server after acknowledging the command
-                .queue();
+        }
     }
 
 }
