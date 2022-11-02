@@ -19,7 +19,7 @@ public class Commands {
                     event.reply("You do not have permissions to kick me.").setEphemeral(true).queue();
                 }
             }
-            default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
+            default -> event.reply("Uh oh, I seem to have forgotten the tools to handle that command :(").setEphemeral(true).queue();
         }
     }
 }
