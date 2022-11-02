@@ -20,25 +20,26 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws FileNotFoundException {
+        //Loading config file
         InputStream inputStream = new FileInputStream("config.yml");
         Yaml yaml = new Yaml();
+        //create the config object
         Map<String, Object> config = yaml.load(inputStream);
 
-        JDA jda = JDABuilder.createLight((String) config.get("token"), EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
+        //login
+        JDA jda = JDABuilder.createLight((String) config.get("token"), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
                 .addEventListeners(new Main()).build();
 
-        // These commands might take a few minutes to be active after creation/update/delete
+        // Prepare building command list
         CommandListUpdateAction commands = jda.updateCommands();
 
-        // Simple reply commands
         //noinspection ResultOfMethodCallIgnored
         commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("say", "Makes the bot say what you tell it to").addOption(STRING, "content", "What the bot should say", true) // you can add required options like this too
         );
 
-        // Commands without any inputs
         //noinspection ResultOfMethodCallIgnored
-        commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("leave", "Make the bot leave the server").setGuildOnly(true) // this doesn't make sense in DMs
-                .setDefaultPermissions(DefaultMemberPermissions.DISABLED) // only admins should be able to use this command.
+        commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("leave", "Make the bot leave the server").setGuildOnly(true) // Allow only in Guilds/Servers
+                .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
         );
 
         // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
@@ -52,7 +53,7 @@ public class Main extends ListenerAdapter {
         if (event.getGuild() == null) return;
         switch (event.getName()) {
             case "say" ->
-                    Commands.say(event, Objects.requireNonNull(event.getOption("content")).getAsString()); // content is required so no null-check here
+                    Commands.say(event, Objects.requireNonNull(event.getOption("content")).getAsString());
             case "leave" -> Commands.leave(event);
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
