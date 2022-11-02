@@ -26,7 +26,7 @@ public class Main extends ListenerAdapter {
         Map<String, Object> config = yaml.load(inputStream);
 
         //login
-        JDA jda = JDABuilder.createLight((String) config.get("token"), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
+        JDA jda = JDABuilder.createLight(config.get("token").toString(), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
                 .addEventListeners(new Main()).build();
 
         // Prepare building command list
