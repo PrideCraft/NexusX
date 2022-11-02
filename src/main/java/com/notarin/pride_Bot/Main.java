@@ -9,17 +9,24 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Main extends ListenerAdapter {
-    public static void main(String[] args) {
-        //TODO implement secure token storage
-        //noinspection SpellCheckingInspection
-        JDA jda = JDABuilder.createLight("MTAzMjA2ODM3MDM0ODExMzk0MA.GXd1_r.Q-MuIqLLzbbDHPpHorrt41WrgtO_g-U9gG1U5k", EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
+    public static void main(String[] args) throws FileNotFoundException {
+        InputStream inputStream = new FileInputStream("config.yml");
+        Yaml yaml = new Yaml();
+        Map<String, Object> config = yaml.load(inputStream);
+
+        JDA jda = JDABuilder.createLight((String) config.get("token"), EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
                 .addEventListeners(new Main()).build();
 
         // These commands might take a few minutes to be active after creation/update/delete

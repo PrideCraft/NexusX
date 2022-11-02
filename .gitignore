@@ -1,4 +1,4 @@
-.env
+config.yml
 
 # Below here are non-project spefic files to be ignored
 # They are Language&IDE specific
