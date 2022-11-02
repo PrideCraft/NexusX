@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
@@ -51,11 +50,7 @@ public class Main extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         // Only accept commands from guilds
         if (event.getGuild() == null) return;
-        switch (event.getName()) {
-            case "say" ->
-                    Commands.say(event, Objects.requireNonNull(event.getOption("content")).getAsString());
-            case "leave" -> Commands.leave(event);
-            default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
-        }
+        String command = event.getName();
+        Commands.slashcommand(command, event);
     }
 }
