@@ -6,18 +6,20 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class Commands {
-    public static void say(SlashCommandInteractionEvent event, String content) {
-        event.reply(content).queue();
-    }
-
-    public static void leave(SlashCommandInteractionEvent event) {
-        if (Objects.requireNonNull(event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
-            event.reply("Leaving the server... :wave:")
-                    .flatMap(v -> Objects.requireNonNull(event.getGuild()).leave()) // Leave server after acknowledging the command
-                    .queue();
-        } else {
-            event.reply("You do not have permissions to kick me.").setEphemeral(true).queue();
+    public static void slashcommand(String command, SlashCommandInteractionEvent event) {
+        switch (command) {
+            case "say" ->
+                    event.reply(Objects.requireNonNull(event.getOption("content")).getAsString()).queue();
+            case "leave" -> {
+                if (Objects.requireNonNull(event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
+                    event.reply("Leaving the server... :wave:")
+                            .flatMap(v -> Objects.requireNonNull(event.getGuild()).leave()) // Leave server after acknowledging the command
+                            .queue();
+                } else {
+                    event.reply("You do not have permissions to kick me.").setEphemeral(true).queue();
+                }
+            }
+            default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
     }
-
 }
