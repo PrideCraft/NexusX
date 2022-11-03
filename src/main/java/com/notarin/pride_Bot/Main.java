@@ -31,8 +31,13 @@ public class Main extends ListenerAdapter {
         }
 
         //login
-        JDA jda = JDABuilder.createLight(config.get("token").toString(), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
-                .addEventListeners(new Main()).build();
+        JDA jda;
+        try {
+            jda = JDABuilder.createLight(config.get("token").toString(), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
+                    .addEventListeners(new Main()).build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // Prepare building command list
         CommandListUpdateAction commands = jda.updateCommands();
