@@ -19,7 +19,10 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) {
+
+        JDA jda;
         Map<String, Object> config;
+
         try {
             //Loading config file
             InputStream inputStream = new FileInputStream("config.yml");
@@ -31,7 +34,6 @@ public class Main extends ListenerAdapter {
         }
 
         //login
-        JDA jda;
         try {
             jda = JDABuilder.createLight(config.get("token").toString(), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
                     .addEventListeners(new Main()).build();
