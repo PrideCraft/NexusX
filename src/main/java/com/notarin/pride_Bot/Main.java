@@ -18,12 +18,17 @@ import java.util.Map;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Main extends ListenerAdapter {
-    public static void main(String[] args) throws FileNotFoundException {
-        //Loading config file
-        InputStream inputStream = new FileInputStream("config.yml");
-        Yaml yaml = new Yaml();
-        //create the config object
-        Map<String, Object> config = yaml.load(inputStream);
+    public static void main(String[] args) {
+        Map<String, Object> config;
+        try {
+            //Loading config file
+            InputStream inputStream = new FileInputStream("config.yml");
+            Yaml yaml = new Yaml();
+            //set the config object
+            config = yaml.load(inputStream);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         //login
         JDA jda = JDABuilder.createLight(config.get("token").toString(), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
