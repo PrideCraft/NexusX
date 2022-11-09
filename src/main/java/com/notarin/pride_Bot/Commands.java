@@ -20,9 +20,7 @@ public class Commands {
                     event.reply("You do not have permissions to kick me.").setEphemeral(true).queue();
                 }
             }
-            case "suggest" ->
-                event.reply("https://github.com/PrideCraft/Public-Issue-Tracker/issues/new/choose").queue();
-            case "bug" ->
+            case "suggest", "bug" ->
                 event.reply("https://github.com/PrideCraft/Public-Issue-Tracker/issues/new/choose").queue();
             default -> {
                 event.reply("Uh oh, I don't think I have the tools to handle that command :( \nPlease contact an administrator.").setEphemeral(true).queue();
