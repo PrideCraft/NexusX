@@ -21,7 +21,7 @@ public class Commands {
             }
             case "suggest" ->
                 event.reply("https://github.com/PrideCraft/Public-Issue-Tracker/issues/new/choose").queue();
-            default -> event.reply("Uh oh, I seem to have forgotten the tools to handle that command :(").setEphemeral(true).queue();
+            default -> event.reply("Uh oh, I don't think I have the tools to handle that command :( \nPlease contact an administrator.").setEphemeral(true).queue();
         }
     }
 }
