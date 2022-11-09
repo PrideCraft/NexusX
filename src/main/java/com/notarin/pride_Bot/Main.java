@@ -76,6 +76,6 @@ public class Main extends ListenerAdapter {
         if (event.getGuild() == null) return;
         String command = event.getName();
         System.out.println("Received command " + event.getCommandString() + " from " + event.getUser().getAsTag());
-        Commands.slashcommand(command, event);
+        Commands.slashCommand(command, event);
     }
 }
