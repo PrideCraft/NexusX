@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Commands {
     public static void slashcommand(String command, SlashCommandInteractionEvent event) {
         switch (command) {
+            case "ping" -> event.reply("Pong!").setEphemeral(true).queue();
             case "say" ->
                     event.reply(Objects.requireNonNull(event.getOption("content")).getAsString()).queue();
             case "leave" -> {

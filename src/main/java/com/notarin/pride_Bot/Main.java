@@ -45,6 +45,10 @@ public class Main extends ListenerAdapter {
         CommandListUpdateAction commands = jda.updateCommands();
 
         //noinspection ResultOfMethodCallIgnored
+        commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ping", "Test connectivity").setGuildOnly(true) // Allow only in Guilds/Servers
+        );
+
+        //noinspection ResultOfMethodCallIgnored
         commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("say", "Makes the bot say what you tell it to").addOption(STRING, "content", "What the bot should say", true) // you can add required options like this too
         );
 
