@@ -67,6 +67,7 @@ public class Main extends ListenerAdapter {
         // Only accept commands from guilds
         if (event.getGuild() == null) return;
         String command = event.getName();
+        System.out.println("Recieved command " + event.getCommandString() + " from " + event.getUser().getAsTag());
         Commands.slashcommand(command, event);
     }
 }
