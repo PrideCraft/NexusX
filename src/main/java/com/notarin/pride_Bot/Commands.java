@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class Commands {
-    public static void slashcommand(String command, SlashCommandInteractionEvent event) {
+    public static void slashCommand(String command, SlashCommandInteractionEvent event) {
         switch (command) {
             case "ping" -> event.reply("Pong!").setEphemeral(true).queue();
             case "say" ->
