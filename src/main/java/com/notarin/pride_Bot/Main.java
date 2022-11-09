@@ -61,6 +61,10 @@ public class Main extends ListenerAdapter {
         commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("suggest", "For when you want to make a suggestion").setGuildOnly(true) // Allow only in Guilds/Servers
         );
 
+        //noinspection ResultOfMethodCallIgnored
+        commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("bug", "For when you want to report a bug").setGuildOnly(true) // Allow only in Guilds/Servers
+        );
+
         // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
         commands.queue();
     }
