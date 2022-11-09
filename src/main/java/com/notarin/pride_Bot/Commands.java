@@ -21,7 +21,16 @@ public class Commands {
             }
             case "suggest" ->
                 event.reply("https://github.com/PrideCraft/Public-Issue-Tracker/issues/new/choose").queue();
-            default -> event.reply("Uh oh, I don't think I have the tools to handle that command :( \nPlease contact an administrator.").setEphemeral(true).queue();
+            default -> {
+                event.reply("Uh oh, I don't think I have the tools to handle that command :( \nPlease contact an administrator.").setEphemeral(true).queue();
+                System.out.println("ERROR: Unhandled command recieved, info:\n" +
+                        "\tCommand Name: " + event.getName() + "\n" +
+                        "\tTime: " + event.getTimeCreated() + "\n" +
+                        "\tServer: " + event.getGuild() + "\n" +
+                        "\tChannel: " + event.getChannel() + "\n" +
+                        "\tUser: " + event.getUser()
+                );
+            }
         }
     }
 }
