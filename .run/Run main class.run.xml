@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run main class" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.notarin.pride_Bot.Main" />
+    <module name="Pride-bot" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
