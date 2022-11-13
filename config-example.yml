@@ -1,5 +1,6 @@
 # Discord info
 token: "Place token here"
+owner-id: "place your discord id here"
 # GitHub Info
 username: "Put github username here"
 personal-access-token: "put your personal access token here"
