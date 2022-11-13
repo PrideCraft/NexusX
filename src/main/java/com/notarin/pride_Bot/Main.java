@@ -5,11 +5,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.Map;
 
@@ -17,18 +13,9 @@ public class Main extends ListenerAdapter {
     public static void main(String[] args) {
 
         JDA jda;
-        Map<String, Object> config;
 
-        try {
-            //Loading config file
-            InputStream inputStream = new FileInputStream("config.yml");
-            Yaml yaml = new Yaml();
-            //set the config object
-            config = yaml.load(inputStream);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
+        Map<String, Object> config = ConfigHandler.loadConfig();
+        
         //login
         try {
             jda = JDABuilder.createLight(config.get("token").toString(), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
