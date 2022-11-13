@@ -36,6 +36,10 @@ public class SlashCommandRegistrar {
         commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("update", "Rebase to most recent commit")
         );
 
+        //noinspection ResultOfMethodCallIgnored
+        commands.addCommands(net.dv8tion.jda.api.interactions.commands.build.Commands.slash("shutdown", "shuts the bot down")
+        );
+
         // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
         commands.queue();
     }

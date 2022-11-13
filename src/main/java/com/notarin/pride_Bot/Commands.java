@@ -50,6 +50,14 @@ public class Commands {
                     event.reply("Uh-oh, you don't seem to have the required permissions!").setEphemeral(true).queue();
                 }
             }
+            case "shutdown" -> {
+                if (Objects.requireNonNull(event.getMember()).getId().equals(config.get("owner-id").toString())) {
+                    event.reply("Shutting down... :wave:").setEphemeral(true).queue();
+                    System.exit(0);
+                } else {
+                    event.reply("Uh-oh, you don't seem to have the required permissions!").setEphemeral(true).queue();
+                }
+            }
             default -> {
                 event.reply("Uh oh, I don't think I have the tools to handle that command :( \nPlease contact an administrator.").setEphemeral(true).queue();
                 System.out.println("ERROR: Unhandled command received, info:\n" +
