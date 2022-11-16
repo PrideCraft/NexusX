@@ -20,6 +20,10 @@ public class ConfigHandler {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        //check for any updates or problems to the bots config
+        updateCheck(config);
+
         return config;
     }
 
