@@ -60,7 +60,7 @@ public class Commands {
             }
             default -> {
                 event.reply("Uh oh, I don't think I have the tools to handle that command :( \nPlease contact an administrator.").setEphemeral(true).queue();
-                System.out.println("ERROR: Unhandled command received, info:\n" +
+                System.out.println("[ERROR] Unhandled command received, info:\n" +
                         "\tCommand Name: " + event.getName() + "\n" +
                         "\tTime: " + event.getTimeCreated() + "\n" +
                         "\tServer: " + event.getGuild() + "\n" +
