@@ -31,7 +31,7 @@ public class ConfigHandler {
         Map<String, Object> exampleConfig;
 
         try {
-            //Loading config file
+            //Loading config example file
             InputStream inputStream = new FileInputStream("config-example.yml");
             Yaml yaml = new Yaml();
             //set the config object
