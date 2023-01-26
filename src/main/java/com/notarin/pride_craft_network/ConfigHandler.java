@@ -1,4 +1,4 @@
-package com.notarin.pride_Bot;
+package com.notarin.pride_craft_network;
 
 import org.yaml.snakeyaml.Yaml;
 

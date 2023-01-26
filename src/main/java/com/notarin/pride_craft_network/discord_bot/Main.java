@@ -1,4 +1,4 @@
-package com.notarin.pride_Bot;
+package com.notarin.pride_craft_network.discord_bot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -10,12 +10,10 @@ import java.util.EnumSet;
 import java.util.Map;
 
 public class Main extends ListenerAdapter {
-    public static void main(String[] args) {
+    public static void init(Map<String, Object> config) {
 
         JDA jda;
 
-        Map<String, Object> config = ConfigHandler.loadConfig();
-        
         //login
         try {
             jda = JDABuilder.createLight(config.get("token").toString(), EnumSet.noneOf(GatewayIntent.class)) // At this point in time we need no intents.
