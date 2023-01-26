@@ -1,5 +1,6 @@
-package com.notarin.pride_Bot;
+package com.notarin.pride_craft_network.discord_bot;
 
+import com.notarin.pride_craft_network.ConfigHandler;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.eclipse.jgit.api.Git;

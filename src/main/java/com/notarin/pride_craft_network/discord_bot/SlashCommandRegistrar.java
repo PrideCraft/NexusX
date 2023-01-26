@@ -1,4 +1,4 @@
-package com.notarin.pride_Bot;
+package com.notarin.pride_craft_network.discord_bot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
