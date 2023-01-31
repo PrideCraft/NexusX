@@ -8,8 +8,15 @@ import java.io.InputStream;
 import java.util.Map;
 
 public class ConfigHandler {
+
+    static Map<String, Object> config;
+
     public static Map<String, Object> loadConfig() {
-        Map<String, Object> config;
+        if (!(config == null)) {
+            return config;
+        }
+
+        System.out.println("Loading config...");
 
         try {
             //Loading config file
