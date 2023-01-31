@@ -10,3 +10,8 @@ secrets:
   - "replace me with something secure"
   - "feel free to add more secrets here"
   - "these are basically tokens, or passwords"
+# Database Info
+db_host: "put database host here"
+db_port: 0000
+db_username: "put database username here"
+db_password: "put database password here"
