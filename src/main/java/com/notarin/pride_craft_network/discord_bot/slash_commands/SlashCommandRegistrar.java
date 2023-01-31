@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class SlashCommandRegistrar {
-    public static void register(JDA jda) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        List<Class<?>> commandClasses = loadCommands();
-
+    public static void register(JDA jda, List<Class<?>> commandClasses) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         CommandListUpdateAction updateCommands;
         Collection<CommandData> commands = new ArrayList<>();
         for (Class<?> clazz : commandClasses) {

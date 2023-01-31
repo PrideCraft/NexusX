@@ -9,12 +9,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import static com.notarin.pride_craft_network.discord_bot.slash_commands.SlashCommandRegistrar.loadCommands;
-
 public class EventRegistrar extends ListenerAdapter {
     // yes, I know there's no constructor,
     // but PMD can deal with it; It's unneeded
-    final List<Class<?>> commandList = loadCommands();
+    List<Class<?>> commandList;
+
+    public EventRegistrar(List<Class<?>> commandList) {
+        this.commandList = commandList;
+    }
+
     public void onSlashCommandInteraction(
             @NotNull SlashCommandInteractionEvent event) {
 
