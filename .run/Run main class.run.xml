@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run main class" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.notarin.pride_craft_network.Main" />
-    <module name="Pride-Network-Server" />
+    <module name="Pride_Craft_Network" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
       <option name="IS_SUBST" value="false" />

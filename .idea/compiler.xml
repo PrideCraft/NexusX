@@ -6,8 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Pride-bot" />
-        <module name="Pride_Bot" />
         <module name="Pride_Craft_Network" />
       </profile>
     </annotationProcessing>
