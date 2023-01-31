@@ -1,5 +1,6 @@
 package com.notarin.pride_craft_network.discord_bot;
 
+import com.notarin.pride_craft_network.ConfigHandler;
 import com.notarin.pride_craft_network.discord_bot.slash_commands.SlashCommandRegistrar;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -12,7 +13,10 @@ import java.util.Map;
 
 public class Main extends ListenerAdapter {
 
-    public static void init(Map<String, Object> config) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static void init() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        //load config
+        Map<String, Object> config = ConfigHandler.loadConfig();
+
         //login
         final JDABuilder jdabuilder = JDABuilder
                 .createDefault((String) config.get("token"))
