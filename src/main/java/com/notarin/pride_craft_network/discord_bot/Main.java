@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 
 public class Main extends ListenerAdapter {
@@ -17,10 +18,11 @@ public class Main extends ListenerAdapter {
                 .createDefault((String) config.get("token"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT);
         final JDA jda = jdabuilder.build();
-        jda.addEventListener(new EventRegistrar());
+        List<Class<?>> slashCommands = SlashCommandRegistrar.loadCommands();
+        jda.addEventListener(new EventRegistrar(slashCommands));
 
         //register the slash commands
-        SlashCommandRegistrar.register(jda);
+        SlashCommandRegistrar.register(jda, slashCommands);
     }
 
 }
