@@ -4,3 +4,9 @@ owner-id: "place your discord id here"
 # GitHub Info
 username: "Put github username here"
 personal-access-token: "put your personal access token here"
+# Server Info
+port: "put port here"
+secrets:
+  - "replace me with something secure"
+  - "feel free to add more secrets here"
+  - "these are basically tokens, or passwords"
