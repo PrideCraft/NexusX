@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Pride-bot" />
         <module name="Pride_Bot" />
+        <module name="Pride_Craft_Network" />
       </profile>
     </annotationProcessing>
   </component>
