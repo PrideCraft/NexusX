@@ -16,8 +16,6 @@ public class ConfigHandler {
             return config;
         }
 
-        System.out.println("Loading config...");
-
         try {
             //Loading config file
             InputStream inputStream = new FileInputStream("config.yml");
