@@ -30,7 +30,9 @@ public class Update implements SlashCommandHandler {
     public void handle(SlashCommandInteractionEvent event) {
         Map<String, Object> config = ConfigHandler.loadConfig();
 
-        if (Objects.requireNonNull(event.getMember()).getId().equals(config.get("owner-id").toString())) {
+        if (Objects.requireNonNull(
+                        event.getMember()).getId()
+                .equals(config.get("owner-id").toString())) {
             String dir = System.getProperty("user.dir");
             try (Repository botRepo = new FileRepository(dir + "/.git")) {
                 Git botGit = new Git(botRepo);
@@ -39,7 +41,10 @@ public class Update implements SlashCommandHandler {
                         .setRemoteBranchName("main")
                         .setRebase(true)
                         .setCredentialsProvider(
-                                new UsernamePasswordCredentialsProvider(config.get("username").toString(), config.get("personal-access-token").toString())
+                                new UsernamePasswordCredentialsProvider(
+                                        config.get("username").toString(),
+                                        config.get("personal-access-token")
+                                                .toString())
                         );
                 gitPull.call();
                 event.reply("Finished!").setEphemeral(true).queue();

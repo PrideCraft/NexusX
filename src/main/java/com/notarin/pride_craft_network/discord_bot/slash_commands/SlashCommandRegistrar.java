@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class SlashCommandRegistrar {
-    public static void register(JDA jda, List<Class<?>> commandClasses) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static void register(JDA jda, List<Class<?>> commandClasses) throws
+            NoSuchMethodException, InvocationTargetException,
+            InstantiationException, IllegalAccessException {
         CommandListUpdateAction updateCommands;
         Collection<CommandData> commands = new ArrayList<>();
         for (Class<?> clazz : commandClasses) {
@@ -41,9 +43,13 @@ public abstract class SlashCommandRegistrar {
 
     public static List<Class<?>> loadCommands() {
 
-        Reflections reflections = new Reflections("com.notarin.pride_craft_network.discord_bot.slash_commands.commands");
+        Reflections reflections = new Reflections(
+                "com.notarin.pride_craft_network." +
+                        "discord_bot.slash_commands.commands"
+        );
 
-        Set<Class<? extends SlashCommandHandler>> commandClassSet = reflections.getSubTypesOf(SlashCommandHandler.class);
+        Set<Class<? extends SlashCommandHandler>> commandClassSet =
+                reflections.getSubTypesOf(SlashCommandHandler.class);
 
         return new ArrayList<>(commandClassSet);
     }

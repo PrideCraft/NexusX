@@ -47,21 +47,37 @@ public class ConfigHandler {
 
         //check for unconfigured values in config, or useless values in config
         for (Map.Entry<String, Object> configIteration : config.entrySet()) {
-            //Check for keys in config not present in exampleconfig, this isn't really a problem so just warn.
+            //Check for keys in config not present in exampleconfig,
+            // this isn't really a problem so just warn.
             if (exampleConfig.get(configIteration.getKey()) == null) {
-                System.out.println("[WARNING] Key found in config not present in example config: " + configIteration.getKey());
+                System.out.println(
+                        "[WARNING] " +
+                                "Key found in config not present " +
+                                "in example config: "
+                                + configIteration.getKey());
             }
-            if (configIteration.getValue().equals(exampleConfig.get(configIteration.getKey()))) {
-                System.out.println("[ERROR] Config value unchanged, please configure key \"" + configIteration.getKey() + "\"");
+            if (configIteration.getValue()
+                    .equals(exampleConfig.get(configIteration.getKey()))) {
+                System.out.println(
+                        "[ERROR] Config value unchanged, " +
+                                "please configure key \""
+                                + configIteration.getKey() + "\"");
                 System.exit(1);
             }
         }
 
         //check for missing keys in config
-        for (Map.Entry<String, Object> exampleConfigIteration : exampleConfig.entrySet()) {
+        for (
+                Map.Entry<String, Object> exampleConfigIteration :
+                exampleConfig.entrySet()
+        ) {
             if (config.get(exampleConfigIteration.getKey()) == null) {
-                System.out.println("[ERROR] Key found in example config not present in config: " + exampleConfigIteration.getKey() +
-                "\nPlease copy all missing values and set them.");
+                System.out.println(
+                        "[ERROR] Key found in example config " +
+                                "not present in config: "
+                                + exampleConfigIteration.getKey() +
+                                "\nPlease copy all missing values and set " +
+                                "them.");
                 System.exit(1);
             }
         }

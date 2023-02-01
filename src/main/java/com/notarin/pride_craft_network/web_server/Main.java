@@ -33,8 +33,9 @@ public class Main {
     private static void defineServerPaths() {
         Spark.get("/ping", (req, res) -> "Pong!");
         Spark.post("/users/:username", (req, res) -> {
-            if (elevatedTransaction(req)) return "User creation not supported yet!";
-            else return denyTransaction(res);
+            if (elevatedTransaction(req)) {
+                return "User creation not supported yet!";
+            } else return denyTransaction(res);
         });
     }
 
