@@ -2,10 +2,12 @@ package com.notarin.pride_craft_network.database;
 
 import org.neo4j.driver.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
+import static com.notarin.pride_craft_network.LogHandler.logError;
 
 public class Query {
 
@@ -22,23 +24,36 @@ public class Query {
         String uri = "bolt://" + host + ":" + port;
         String user = (String) config.get("db_username");
         String pass = (String) config.get("db_password");
-        driver = GraphDatabase.driver(uri, AuthTokens.basic(user, pass));
+        if (config.get("db_encryption").equals(false)) {
+            driver = GraphDatabase.driver(uri, AuthTokens.basic(user, pass));
+        } else if (config.get("db_encryption").equals(true)) {
+            Config builder = Config.builder().withEncryption().build();
+            driver = GraphDatabase.driver(uri, AuthTokens.basic(user, pass),
+                    builder);
+        } else {
+            logError(
+                    "Database",
+                    "Invalid encryption value in config.yml");
+        }
         return driver;
     }
 
-    static void createAccount(String minecraftUuid) {
+    public static void createAccount(String minecraftUuid) {
+        String query = """
+                CREATE (account:PrideAccount\s
+                {name: "Pride Account", id: $id})
+                CREATE (minecraftAccount:MinecraftAccount\s
+                {name: $MinecraftUUID})
+                CREATE (account)-[r1:OWNS]->(minecraftAccount)""";
         Driver driver = openConnection();
         try (Session session = driver.session()) {
-            try (Transaction tx = session.beginTransaction()) {
-                String query = "" +
-                        "CREATE (account:PrideAccount {name: \"Pride Account\", id: \"" + generateId() + "\"})\n" +
-                        "CREATE (minecraftaccount:MinecraftAccount {name: \"" + minecraftUuid + "\"})\n" +
-                        "CREATE (account)-[r1:OWNS]->(minecraftaccount)\n" +
-                        "return account, minecraftaccount" +
-                        "";
-                Result run = tx.run(query);
-                System.out.println(run);
-            }
+            session.executeWriteWithoutResult(q -> {
+
+                Map<String, Object> params = new HashMap<>();
+                params.put("id", generateId());
+                params.put("MinecraftUUID", minecraftUuid);
+                q.run(query, params);
+            });
         }
     }
 
@@ -50,7 +65,8 @@ public class Query {
 
         return random.ints(leftLimit, rightLimit + 1)
                 .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint,
+                        StringBuilder::append)
                 .toString();
     }
 
