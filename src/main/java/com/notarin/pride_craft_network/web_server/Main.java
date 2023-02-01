@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
+import static com.notarin.pride_craft_network.database.Query.createAccount;
 
 public class Main {
 
@@ -32,9 +33,10 @@ public class Main {
 
     private static void defineServerPaths() {
         Spark.get("/ping", (req, res) -> "Pong!");
-        Spark.post("/users/:username", (req, res) -> {
+        Spark.post("/users/:uuid", (req, res) -> {
             if (elevatedTransaction(req)) {
-                return "User creation not supported yet!";
+                createAccount(req.params(":uuid"));
+                return "Success";
             } else return denyTransaction(res);
         });
     }

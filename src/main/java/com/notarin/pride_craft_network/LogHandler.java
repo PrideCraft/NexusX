@@ -15,10 +15,11 @@ public class LogHandler {
         }
     }
 
-    static void logError(String loggerName, String message) {
+    public static void logError(String loggerName, String message) {
         if (org.slf4j.LoggerFactory.getLogger(loggerName).isErrorEnabled()) {
             org.slf4j.LoggerFactory.getLogger(loggerName).error(message);
         }
+        System.exit(1);
     }
 
     static void logDebug(String loggerName, String message) {
