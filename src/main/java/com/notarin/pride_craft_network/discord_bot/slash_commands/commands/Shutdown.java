@@ -25,11 +25,16 @@ public class Shutdown implements SlashCommandHandler {
     public void handle(SlashCommandInteractionEvent event) {
         Map<String, Object> config = ConfigHandler.loadConfig();
 
-        if (Objects.requireNonNull(event.getMember()).getId().equals(config.get("owner-id").toString())) {
+        if (Objects.requireNonNull(
+                        event.getMember()).getId()
+                .equals(config.get("owner-id").toString())) {
             event.reply("Shutting down... :wave:").setEphemeral(true).queue();
             System.exit(0);
         } else {
-            event.reply("Uh-oh, you don't seem to have the required permissions!").setEphemeral(true).queue();
+            event.reply(
+                            "Uh-oh, you don't seem to have the required " +
+                                    "permissions!")
+                    .setEphemeral(true).queue();
         }
     }
 

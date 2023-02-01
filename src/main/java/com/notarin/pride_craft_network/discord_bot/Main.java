@@ -13,7 +13,9 @@ import java.util.Map;
 
 public class Main extends ListenerAdapter {
 
-    public static void init() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static void init() throws InvocationTargetException,
+            NoSuchMethodException, InstantiationException,
+            IllegalAccessException {
         //load config
         Map<String, Object> config = ConfigHandler.loadConfig();
 

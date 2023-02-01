@@ -23,12 +23,16 @@ public class Leave implements SlashCommandHandler {
 
     @Override
     public void handle(SlashCommandInteractionEvent event) {
-        if (Objects.requireNonNull(event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
+        if (Objects.requireNonNull(
+                event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
             event.reply("Leaving the server... :wave:")
-                    .flatMap(v -> Objects.requireNonNull(event.getGuild()).leave()) // Leave server after acknowledging the command
+                    .flatMap(v ->
+                            // Leave server after acknowledging the command
+                            Objects.requireNonNull(event.getGuild()).leave())
                     .queue();
         } else {
-            event.reply("You do not have permissions to kick me.").setEphemeral(true).queue();
+            event.reply("You do not have permissions to kick me.")
+                    .setEphemeral(true).queue();
         }
     }
 
