@@ -33,7 +33,7 @@ public class Main {
 
     private static void defineServerPaths() {
         Spark.get("/ping", (req, res) -> "Pong!");
-        Spark.post("/users/:uuid", (req, res) -> {
+        Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
             if (elevatedTransaction(req)) {
                 createAccount(req.params(":uuid"));
                 return "Success";
