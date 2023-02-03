@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
+import static com.notarin.pride_craft_network.LogHandler.logWarn;
 import static com.notarin.pride_craft_network.database.Query.createAccount;
 
 public class Main {
@@ -64,8 +65,9 @@ public class Main {
         Integer port;
         try {
             port = (Integer) config.get("port");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            logWarn("WebServer", "Invalid port in config.yml, defaulting to 8080");
+            return 8080;
         }
         return port;
     }

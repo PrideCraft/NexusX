@@ -9,7 +9,7 @@ public class LogHandler {
         }
     }
 
-    static void logWarn(String loggerName, String message) {
+    public static void logWarn(String loggerName, String message) {
         if (org.slf4j.LoggerFactory.getLogger(loggerName).isWarnEnabled()) {
             org.slf4j.LoggerFactory.getLogger(loggerName).warn(message);
         }
