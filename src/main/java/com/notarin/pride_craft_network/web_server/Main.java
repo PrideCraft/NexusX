@@ -12,6 +12,7 @@ import java.util.Map;
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logWarn;
 import static com.notarin.pride_craft_network.database.Query.createAccount;
+import static com.notarin.pride_craft_network.web_server.BuildJson.accessDenied;
 
 public class Main {
 
@@ -53,7 +54,7 @@ public class Main {
     @NotNull
     private static String denyTransaction(Response res) {
         res.status(401);
-        return "Unauthorized";
+        return accessDenied();
     }
 
     private static void configureServer(Map<String, Object> config) {
