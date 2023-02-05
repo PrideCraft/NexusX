@@ -1,5 +1,6 @@
 package com.notarin.pride_craft_network.web_server;
 
+import com.notarin.pride_craft_network.database.objects.PrideUser;
 import org.jetbrains.annotations.NotNull;
 import spark.Request;
 import spark.Response;
@@ -12,6 +13,7 @@ import java.util.Map;
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logWarn;
 import static com.notarin.pride_craft_network.database.Query.createAccount;
+import static com.notarin.pride_craft_network.database.Query.getAccount;
 import static com.notarin.pride_craft_network.web_server.BuildJson.accessDenied;
 
 public class Main {
@@ -37,9 +39,18 @@ public class Main {
         Spark.get("/ping", (req, res) -> "Pong!");
         Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
             if (elevatedTransaction(req)) {
+                //TODO: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
                 createAccount(req.params(":uuid"));
                 return "Success";
             } else return denyTransaction(res);
+        });
+        Spark.get("/user/:id", (req, res) -> {
+            PrideUser account = getAccount(req.params(":id"));
+            if (account == null) {
+                res.status(404);
+                return BuildJson.noSuchUser();
+            }
+            return BuildJson.user(account);
         });
     }
 
