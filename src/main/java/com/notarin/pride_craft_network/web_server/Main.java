@@ -55,7 +55,12 @@ public class Main {
     }
 
     private static boolean elevatedTransaction(Request req) {
-        String token = req.headers("Authorization").replace("Bearer ", "");
+        String token;
+        try {
+            token = req.headers("Authorization").replace("Bearer ", "");
+        } catch (Exception e) {
+            return false;
+        }
         Map<String, Object> config = loadConfig();
         String[] secrets = parseArray(config.get("secrets").toString());
         List<String> secretList = Arrays.asList(secrets);
