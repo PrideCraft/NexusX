@@ -8,6 +8,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * A command to make the bot shut down.
+ */
 @SuppressWarnings("unused")
 public class Shutdown implements SlashCommandHandler {
 

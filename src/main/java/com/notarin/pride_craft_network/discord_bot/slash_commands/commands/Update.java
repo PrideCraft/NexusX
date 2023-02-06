@@ -13,6 +13,9 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * A command for updating the bot.
+ */
 @SuppressWarnings("unused")
 public class Update implements SlashCommandHandler {
 

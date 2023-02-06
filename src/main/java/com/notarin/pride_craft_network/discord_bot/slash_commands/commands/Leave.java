@@ -8,6 +8,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
+/**
+ * A command for making the bot leave the server.
+ */
 @SuppressWarnings("unused")
 public class Leave implements SlashCommandHandler {
 

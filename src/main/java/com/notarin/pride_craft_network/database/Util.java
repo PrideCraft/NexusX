@@ -15,9 +15,17 @@ import java.util.Random;
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logError;
 
+/**
+ * This class contains utility methods for database related tasks.
+ */
 public class Util {
     static Driver driver;
 
+    /**
+     * Opens a connection to the database.
+     *
+     * @return The Neo4j driver
+     */
     public static Driver openConnection() {
         if (!(driver == null)) {
             return driver;
@@ -43,6 +51,11 @@ public class Util {
         return driver;
     }
 
+    /**
+     * Generates a random ID.
+     *
+     * @return A random ID
+     */
     public static String generateId() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'

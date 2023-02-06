@@ -5,6 +5,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+/**
+ * A command for making the bot say what you tell it to.
+ */
 @SuppressWarnings("unused")
 public class Say implements SlashCommandHandler {
 

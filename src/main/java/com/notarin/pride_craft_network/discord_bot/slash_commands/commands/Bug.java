@@ -4,6 +4,9 @@ import com.notarin.pride_craft_network.discord_bot.slash_commands.SlashCommandHa
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+/**
+ * A command for reporting bugs.
+ */
 @SuppressWarnings("unused")
 public class Bug implements SlashCommandHandler {
 
