@@ -4,13 +4,14 @@ import com.notarin.pride_craft_network.database.objects.PrideUser;
 
 public class BuildJson {
 
-    public static String accessDenied() {
+    public static String error(String message) {
         return """
                 {
                   "status": "error",
-                  "message": "Unauthorized"
-                }""";
+                  "message": "%s"
+                }""".formatted(message);
     }
+
 
     public static String user(PrideUser prideUser) {
         String json = """
@@ -22,14 +23,6 @@ public class BuildJson {
                   }
                 }""";
         return String.format(json, prideUser.id(), prideUser.minecraftUuid());
-    }
-
-    public static String noSuchUser() {
-        return """
-                {
-                  "status": "error",
-                  "message": "No such user"
-                }""";
     }
 
 }
