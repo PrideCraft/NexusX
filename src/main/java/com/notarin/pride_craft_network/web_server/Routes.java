@@ -19,7 +19,7 @@ public class Routes {
                     return BuildJson.error("Invalid UUID");
                 }
                 final PrideUser account = createAccount(req.params(":uuid"));
-                return Main.getUser(res, account.id());
+                return Main.getUserByPrideId(res, account.id());
             } else return Main.denyTransaction(res);
         });
     }
@@ -27,7 +27,14 @@ public class Routes {
     static void getUser() {
         Spark.get("/user/:id", (req, res) -> {
             final String params = req.params(":id");
-            return Main.getUser(res, params);
+            return Main.getUserByPrideId(res, params);
+        });
+    }
+
+    static void getUserFromMinecraftUuid() {
+        Spark.get("/uuid/:uuid", (req, res) -> {
+            final String params = req.params(":uuid");
+            return Main.getUserByMinecraftUuid(res, params);
         });
     }
 

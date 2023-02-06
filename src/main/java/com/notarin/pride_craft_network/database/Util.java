@@ -69,18 +69,28 @@ public class Util {
                 .toString();
     }
 
+    /**
+     * Parses a PrideUser from a record.
+     *
+     * @param record The record to parse
+     * @return The parsed PrideUser
+     */
     @NotNull
-    static PrideUser parsePrideUserFromRecord(final String generatedId, final Record record) {
+    static PrideUser parsePrideUserFromRecord(final Record record) {
         String minecraftUuid = null;
+        String prideId = null;
         for (final Value value : record.values()) {
             final boolean node = value.type().name().equals("NODE");
             if (node && value.asNode().hasLabel("MinecraftAccount")) {
                 final Value name = value.asNode().get("name");
                 minecraftUuid = name.asString();
+            } else if (node && value.asNode().hasLabel("PrideAccount")) {
+                final Value name = value.asNode().get("name");
+                prideId = name.asString();
             }
         }
         return new PrideUser(
-                generatedId,
+                prideId,
                 minecraftUuid
         );
     }
