@@ -1,9 +1,13 @@
 package com.notarin.pride_craft_network.database;
 
+import com.notarin.pride_craft_network.database.objects.PrideUser;
+import org.jetbrains.annotations.NotNull;
 import org.neo4j.driver.AuthTokens;
-import org.neo4j.driver.Config;
 import org.neo4j.driver.Driver;
+import org.neo4j.driver.Config;
 import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Record;
+import org.neo4j.driver.Value;
 
 import java.util.Map;
 import java.util.Random;
@@ -50,5 +54,21 @@ public class Util {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint,
                         StringBuilder::append)
                 .toString();
+    }
+
+    @NotNull
+    static PrideUser parsePrideUserFromRecord(String generatedId, Record record) {
+        String minecraftUuid = null;
+        for (Value value : record.values()) {
+            boolean node = value.type().name().equals("NODE");
+            if (node && value.asNode().hasLabel("MinecraftAccount")) {
+                Value name = value.asNode().get("name");
+                minecraftUuid = name.asString();
+            }
+        }
+        return new PrideUser(
+                generatedId,
+                minecraftUuid
+        );
     }
 }
