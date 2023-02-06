@@ -25,7 +25,7 @@ public class Leave implements SlashCommandHandler {
     }
 
     @Override
-    public void handle(SlashCommandInteractionEvent event) {
+    public void handle(final SlashCommandInteractionEvent event) {
         if (Objects.requireNonNull(
                 event.getMember()).hasPermission(Permission.KICK_MEMBERS)) {
             event.reply("Leaving the server... :wave:")
@@ -40,7 +40,7 @@ public class Leave implements SlashCommandHandler {
     }
 
     @Override
-    public void setOptions(SlashCommandData command) {
+    public void setOptions(final SlashCommandData command) {
         command.setGuildOnly(true);
         command.setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }

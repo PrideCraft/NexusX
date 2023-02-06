@@ -31,16 +31,16 @@ public class Util {
             return driver;
         }
 
-        Map<String, Object> config = loadConfig();
-        String host = (String) config.get("db_host");
-        Integer port = (Integer) config.get("db_port");
-        String uri = "bolt://" + host + ":" + port;
-        String user = (String) config.get("db_username");
-        String pass = (String) config.get("db_password");
+        final Map<String, Object> config = loadConfig();
+        final String host = (String) config.get("db_host");
+        final Integer port = (Integer) config.get("db_port");
+        final String uri = "bolt://" + host + ":" + port;
+        final String user = (String) config.get("db_username");
+        final String pass = (String) config.get("db_password");
         if (config.get("db_encryption").equals(false)) {
             driver = GraphDatabase.driver(uri, AuthTokens.basic(user, pass));
         } else if (config.get("db_encryption").equals(true)) {
-            Config builder = Config.builder().withEncryption().build();
+            final Config builder = Config.builder().withEncryption().build();
             driver = GraphDatabase.driver(uri, AuthTokens.basic(user, pass),
                     builder);
         } else {
@@ -57,10 +57,10 @@ public class Util {
      * @return A random ID
      */
     public static String generateId() {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 30;
-        Random random = new Random();
+        final int leftLimit = 97; // letter 'a'
+        final int rightLimit = 122; // letter 'z'
+        final int targetStringLength = 30;
+        final Random random = new Random();
 
         return random.ints(leftLimit, rightLimit + 1)
                 .limit(targetStringLength)
@@ -70,12 +70,12 @@ public class Util {
     }
 
     @NotNull
-    static PrideUser parsePrideUserFromRecord(String generatedId, Record record) {
+    static PrideUser parsePrideUserFromRecord(final String generatedId, final Record record) {
         String minecraftUuid = null;
-        for (Value value : record.values()) {
-            boolean node = value.type().name().equals("NODE");
+        for (final Value value : record.values()) {
+            final boolean node = value.type().name().equals("NODE");
             if (node && value.asNode().hasLabel("MinecraftAccount")) {
-                Value name = value.asNode().get("name");
+                final Value name = value.asNode().get("name");
                 minecraftUuid = name.asString();
             }
         }

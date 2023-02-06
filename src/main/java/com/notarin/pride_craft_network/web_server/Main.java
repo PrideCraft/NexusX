@@ -24,18 +24,18 @@ public class Main {
      * Initializes the web server.
      */
     public static void init() {
-        Map<String, Object> config = loadConfig();
+        final Map<String, Object> config = loadConfig();
         configureServer(config);
         Spark.init();
         defineServerPaths();
     }
 
-    private static String[] parseArray(String inputString) {
-        String removedOpenBracket =
+    private static String[] parseArray(final String inputString) {
+        final String removedOpenBracket =
                 inputString.replace("[", "");
-        String removedCloseBracket =
+        final String removedCloseBracket =
                 removedOpenBracket.replace("]", "");
-        String removedSpaces =
+        final String removedSpaces =
                 removedCloseBracket.replace(" ", "");
         return removedSpaces.split(",");
     }
@@ -44,23 +44,23 @@ public class Main {
         Spark.get("/ping", (req, res) -> "Pong!");
         Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
             if (elevatedTransaction(req)) {
-                String regex = "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
+                final String regex = "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
                 if (!req.params(":uuid").matches(regex)) {
                     res.status(400);
                     return BuildJson.error("Invalid UUID");
                 }
-                PrideUser account = createAccount(req.params(":uuid"));
+                final PrideUser account = createAccount(req.params(":uuid"));
                 return getUser(res, account.id());
             } else return denyTransaction(res);
         });
         Spark.get("/user/:id", (req, res) -> {
-            String params = req.params(":id");
+            final String params = req.params(":id");
             return getUser(res, params);
         });
     }
 
-    private static String getUser(Response res, String id) {
-        PrideUser account = getAccount(id);
+    private static String getUser(final Response res, final String id) {
+        final PrideUser account = getAccount(id);
         if (account == null) {
             res.status(404);
             return BuildJson.error("User not found");
@@ -68,35 +68,35 @@ public class Main {
         return BuildJson.user(account);
     }
 
-    private static boolean elevatedTransaction(Request req) {
-        String token;
+    private static boolean elevatedTransaction(final Request req) {
+        final String token;
         try {
             token = req.headers("Authorization").replace("Bearer ", "");
-        } catch (Exception e) {
+        } catch (final RuntimeException e) {
             return false;
         }
-        Map<String, Object> config = loadConfig();
-        String[] secrets = parseArray(config.get("secrets").toString());
-        List<String> secretList = Arrays.asList(secrets);
+        final Map<String, Object> config = loadConfig();
+        final String[] secrets = parseArray(config.get("secrets").toString());
+        final List<String> secretList = Arrays.asList(secrets);
         return secretList.contains(token);
     }
 
     @NotNull
-    private static String denyTransaction(Response res) {
+    private static String denyTransaction(final Response res) {
         res.status(401);
         return BuildJson.error("Unauthorized");
     }
 
-    private static void configureServer(Map<String, Object> config) {
-        Integer port = getPort(config);
+    private static void configureServer(final Map<String, Object> config) {
+        final Integer port = getPort(config);
         Spark.port(port);
     }
 
-    private static Integer getPort(Map<String, Object> config) {
-        Integer port;
+    private static Integer getPort(final Map<String, Object> config) {
+        final Integer port;
         try {
             port = (Integer) config.get("port");
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             logWarn("WebServer", "Invalid port in config.yml, defaulting to 8080");
             return 8080;
         }

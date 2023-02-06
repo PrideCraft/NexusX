@@ -32,14 +32,14 @@ public class Main extends ListenerAdapter {
             NoSuchMethodException, InstantiationException,
             IllegalAccessException {
         //load config
-        Map<String, Object> config = ConfigHandler.loadConfig();
+        final Map<String, Object> config = ConfigHandler.loadConfig();
 
         //login
         final JDABuilder jdabuilder = JDABuilder
                 .createDefault((String) config.get("token"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT);
         final JDA jda = jdabuilder.build();
-        List<Class<?>> slashCommands = SlashCommandRegistrar.loadCommands();
+        final List<Class<?>> slashCommands = SlashCommandRegistrar.loadCommands();
         jda.addEventListener(new EventRegistrar(slashCommands));
 
         //register the slash commands

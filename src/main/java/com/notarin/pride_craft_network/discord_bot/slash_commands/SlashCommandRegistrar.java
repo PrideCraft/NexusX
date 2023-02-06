@@ -32,20 +32,20 @@ public abstract class SlashCommandRegistrar {
      * @throws IllegalAccessException Thrown when registering slash commands
      * fails
      */
-    public static void register(JDA jda, List<Class<?>> commandClasses) throws
+    public static void register(final JDA jda, final List<Class<?>> commandClasses) throws
             NoSuchMethodException, InvocationTargetException,
             InstantiationException, IllegalAccessException {
-        CommandListUpdateAction updateCommands;
-        Collection<CommandData> commands = new ArrayList<>();
-        for (Class<?> clazz : commandClasses) {
+        final CommandListUpdateAction updateCommands;
+        final Collection<CommandData> commands = new ArrayList<>();
+        for (final Class<?> clazz : commandClasses) {
             // Get the constructor for the class
-            Constructor<?> constructor = clazz.getConstructor();
+            final Constructor<?> constructor = clazz.getConstructor();
             // Create a new instance of the class
-            SlashCommandHandler command =
+            final SlashCommandHandler command =
                     (SlashCommandHandler) constructor.newInstance();
-            String commandName = command.getName();
-            String commandDescription = command.getDescription();
-            SlashCommandData slashCommand =
+            final String commandName = command.getName();
+            final String commandDescription = command.getDescription();
+            final SlashCommandData slashCommand =
                     Commands.slash(
                             commandName.toLowerCase(),
                             commandDescription);
@@ -65,12 +65,12 @@ public abstract class SlashCommandRegistrar {
      */
     public static List<Class<?>> loadCommands() {
 
-        Reflections reflections = new Reflections(
+        final Reflections reflections = new Reflections(
                 "com.notarin.pride_craft_network." +
                         "discord_bot.slash_commands.commands"
         );
 
-        Set<Class<? extends SlashCommandHandler>> commandClassSet =
+        final Set<Class<? extends SlashCommandHandler>> commandClassSet =
                 reflections.getSubTypesOf(SlashCommandHandler.class);
 
         return new ArrayList<>(commandClassSet);
