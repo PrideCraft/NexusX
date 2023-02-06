@@ -7,8 +7,17 @@ import org.neo4j.driver.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class handles all the queries to the database.
+ */
 public class Query {
 
+    /**
+     * Creates a new account in the database.
+     *
+     * @param minecraftUuid The UUID of the Minecraft account
+     * @return The created account
+     */
     public static PrideUser createAccount(String minecraftUuid) {
         String query = """
                 CREATE (account:PrideAccount\s
@@ -29,6 +38,12 @@ public class Query {
         }
     }
 
+    /**
+     * Gets an account from the database.
+     *
+     * @param prideId The ID of the account
+     * @return The account
+     */
     public static PrideUser getAccount(String prideId) {
         String query = """
                 MATCH r=(account:PrideAccount\s

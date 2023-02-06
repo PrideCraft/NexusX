@@ -14,7 +14,24 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A class for registering slash commands.
+ */
 public abstract class SlashCommandRegistrar {
+    /**
+     * Registers the slash commands.
+     *
+     * @param jda The JDA instance to register the commands to
+     * @param commandClasses The classes to register
+     * @throws NoSuchMethodException Should never be thrown, but if it does,
+     * the reflector found a method that doesn't exist
+     * @throws InvocationTargetException Thrown when registering slash commands
+     * fails
+     * @throws InstantiationException Thrown when registering slash commands
+     * fails
+     * @throws IllegalAccessException Thrown when registering slash commands
+     * fails
+     */
     public static void register(JDA jda, List<Class<?>> commandClasses) throws
             NoSuchMethodException, InvocationTargetException,
             InstantiationException, IllegalAccessException {
@@ -41,6 +58,11 @@ public abstract class SlashCommandRegistrar {
         updateCommands.queue();
     }
 
+    /**
+     * Loads the classes that extend SlashCommandHandler.
+     *
+     * @return A list of classes that extend SlashCommandHandler
+     */
     public static List<Class<?>> loadCommands() {
 
         Reflections reflections = new Reflections(

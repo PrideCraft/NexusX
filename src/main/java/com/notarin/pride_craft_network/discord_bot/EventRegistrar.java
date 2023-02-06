@@ -9,11 +9,19 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+/**
+ * A class that registers all slash commands.
+ */
 public class EventRegistrar extends ListenerAdapter {
     // yes, I know there's no constructor,
     // but PMD can deal with it; It's unneeded
     final List<Class<?>> commandList;
 
+    /**
+     * Creates a new EventRegistrar.
+     *
+     * @param commandList The list of slash commands
+     */
     public EventRegistrar(List<Class<?>> commandList) {
         this.commandList = commandList;
     }

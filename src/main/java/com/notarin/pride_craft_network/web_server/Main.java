@@ -15,8 +15,14 @@ import static com.notarin.pride_craft_network.LogHandler.logWarn;
 import static com.notarin.pride_craft_network.database.Query.createAccount;
 import static com.notarin.pride_craft_network.database.Query.getAccount;
 
+/**
+ * The main class for the web server.
+ */
 public class Main {
 
+    /**
+     * Initializes the web server.
+     */
     public static void init() {
         Map<String, Object> config = loadConfig();
         configureServer(config);

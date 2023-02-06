@@ -7,10 +7,19 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
 
+/**
+ * This class handles the loading of the config file, and checking for any
+ * updates to the config file.
+ */
 public class ConfigHandler {
 
     static Map<String, Object> config;
 
+    /**
+     * Loads the config file, and checks for any updates to the config file.
+     *
+     * @return The config object
+     */
     public static Map<String, Object> loadConfig() {
         if (!(config == null)) {
             return config;
@@ -32,6 +41,11 @@ public class ConfigHandler {
         return config;
     }
 
+    /**
+     * Checks for any updates to the config file.
+     *
+     * @param config The config object
+     */
     public static void updateCheck(Map<String, Object> config) {
         Map<String, Object> exampleConfig;
 
