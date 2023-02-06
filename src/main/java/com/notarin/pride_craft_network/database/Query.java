@@ -37,7 +37,7 @@ public class Query {
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
             final Record record = run.single();
-            return Util.parsePrideUserFromRecord(generatedId, record);
+            return Util.parsePrideUserFromRecord(record);
         }
     }
 
@@ -58,10 +58,31 @@ public class Query {
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
             final Record record = run.single();
-            return Util.parsePrideUserFromRecord(prideId, record);
+            return Util.parsePrideUserFromRecord(record);
         } catch (final NoSuchRecordException e) {
-            throw new RuntimeException(e);
-        } catch (final RuntimeException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets an account from the database.
+     *
+     * @param UUID The UUID of the Minecraft account
+     * @return The account
+     */
+    public static PrideUser getAccountByUUID(final String UUID) {
+        final String query = """
+                MATCH r=(account:PrideAccount)-->(minecraftAccount:MinecraftAccount\s
+                {name: $UUID})\s
+                RETURN r, account, minecraftAccount""";
+        final Map<String, Object> params = new HashMap<>();
+        params.put("UUID", UUID);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            return Util.parsePrideUserFromRecord(record);
+        } catch (final NoSuchRecordException e) {
             return null;
         }
     }

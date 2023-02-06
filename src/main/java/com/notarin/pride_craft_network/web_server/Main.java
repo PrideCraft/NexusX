@@ -13,6 +13,7 @@ import java.util.Map;
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logWarn;
 import static com.notarin.pride_craft_network.database.Query.getAccount;
+import static com.notarin.pride_craft_network.database.Query.getAccountByUUID;
 
 /**
  * The main class for the web server.
@@ -43,10 +44,20 @@ public class Main {
         Routes.ping();
         Routes.makeUserFromMinecraftUuid();
         Routes.getUser();
+        Routes.getUserFromMinecraftUuid();
     }
 
-    static String getUser(final Response res, final String id) {
+    static String getUserByPrideId(final Response res, final String id) {
         final PrideUser account = getAccount(id);
+        if (account == null) {
+            res.status(404);
+            return BuildJson.error("User not found");
+        }
+        return BuildJson.user(account);
+    }
+
+    static String getUserByMinecraftUuid(final Response res, final String uuid) {
+        final PrideUser account = getAccountByUUID(uuid);
         if (account == null) {
             res.status(404);
             return BuildJson.error("User not found");
