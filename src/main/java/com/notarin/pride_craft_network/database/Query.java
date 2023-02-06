@@ -1,7 +1,6 @@
 package com.notarin.pride_craft_network.database;
 
 import com.notarin.pride_craft_network.database.objects.PrideUser;
-import org.jetbrains.annotations.NotNull;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.*;
 
@@ -26,24 +25,8 @@ public class Query {
         try (Session session = driver.session()) {
             Result run = session.run(query, params);
             Record record = run.single();
-            return getPrideUser(generatedId, record);
+            return Util.parsePrideUserFromRecord(generatedId, record);
         }
-    }
-
-    @NotNull
-    private static PrideUser getPrideUser(String generatedId, Record record) {
-        String minecraftUuid = null;
-        for (Value value : record.values()) {
-            boolean node = value.type().name().equals("NODE");
-            if (node && value.asNode().hasLabel("MinecraftAccount")) {
-                Value name = value.asNode().get("name");
-                minecraftUuid = name.asString();
-            }
-        }
-        return new PrideUser(
-                generatedId,
-                minecraftUuid
-        );
     }
 
     public static PrideUser getAccount(String prideId) {
@@ -57,7 +40,7 @@ public class Query {
         try (Session session = driver.session()) {
             Result run = session.run(query, params);
             Record record = run.single();
-            return getPrideUser(prideId, record);
+            return Util.parsePrideUserFromRecord(prideId, record);
         } catch (Exception e) {
             return null;
         }
