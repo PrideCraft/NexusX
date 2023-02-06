@@ -12,7 +12,6 @@ import java.util.Map;
 
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logWarn;
-import static com.notarin.pride_craft_network.database.Query.createAccount;
 import static com.notarin.pride_craft_network.database.Query.getAccount;
 
 /**
@@ -41,25 +40,12 @@ public class Main {
     }
 
     private static void defineServerPaths() {
-        Spark.get("/ping", (req, res) -> "Pong!");
-        Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
-            if (elevatedTransaction(req)) {
-                final String regex = "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
-                if (!req.params(":uuid").matches(regex)) {
-                    res.status(400);
-                    return BuildJson.error("Invalid UUID");
-                }
-                final PrideUser account = createAccount(req.params(":uuid"));
-                return getUser(res, account.id());
-            } else return denyTransaction(res);
-        });
-        Spark.get("/user/:id", (req, res) -> {
-            final String params = req.params(":id");
-            return getUser(res, params);
-        });
+        Routes.ping();
+        Routes.makeUserFromMinecraftUuid();
+        Routes.getUser();
     }
 
-    private static String getUser(final Response res, final String id) {
+    static String getUser(final Response res, final String id) {
         final PrideUser account = getAccount(id);
         if (account == null) {
             res.status(404);
@@ -68,7 +54,7 @@ public class Main {
         return BuildJson.user(account);
     }
 
-    private static boolean elevatedTransaction(final Request req) {
+    static boolean elevatedTransaction(final Request req) {
         final String token;
         try {
             token = req.headers("Authorization").replace("Bearer ", "");
@@ -82,7 +68,7 @@ public class Main {
     }
 
     @NotNull
-    private static String denyTransaction(final Response res) {
+    static String denyTransaction(final Response res) {
         res.status(401);
         return BuildJson.error("Unauthorized");
     }
