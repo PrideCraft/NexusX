@@ -12,7 +12,7 @@ import java.util.List;
 public class EventRegistrar extends ListenerAdapter {
     // yes, I know there's no constructor,
     // but PMD can deal with it; It's unneeded
-    List<Class<?>> commandList;
+    final List<Class<?>> commandList;
 
     public EventRegistrar(List<Class<?>> commandList) {
         this.commandList = commandList;
