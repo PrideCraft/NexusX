@@ -26,12 +26,13 @@ public class Query {
         try (Session session = driver.session()) {
             Result run = session.run(query, params);
             Record record = run.single();
-            return getPrideUser(minecraftUuid, generatedId, record);
+            return getPrideUser(generatedId, record);
         }
     }
 
     @NotNull
-    private static PrideUser getPrideUser(String minecraftUuid, String generatedId, Record record) {
+    private static PrideUser getPrideUser(String generatedId, Record record) {
+        String minecraftUuid = null;
         for (Value value : record.values()) {
             boolean node = value.type().name().equals("NODE");
             if (node && value.asNode().hasLabel("MinecraftAccount")) {
@@ -56,8 +57,7 @@ public class Query {
         try (Session session = driver.session()) {
             Result run = session.run(query, params);
             Record record = run.single();
-            String minecraftUuid = null;
-            return getPrideUser(minecraftUuid, prideId, record);
+            return getPrideUser(prideId, record);
         } catch (Exception e) {
             return null;
         }
