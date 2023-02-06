@@ -14,7 +14,6 @@ import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logWarn;
 import static com.notarin.pride_craft_network.database.Query.createAccount;
 import static com.notarin.pride_craft_network.database.Query.getAccount;
-import static com.notarin.pride_craft_network.web_server.BuildJson.accessDenied;
 
 public class Main {
 
@@ -39,19 +38,28 @@ public class Main {
         Spark.get("/ping", (req, res) -> "Pong!");
         Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
             if (elevatedTransaction(req)) {
-                //TODO: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                createAccount(req.params(":uuid"));
-                return "Success";
+                String regex = "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
+                if (!req.params(":uuid").matches(regex)) {
+                    res.status(400);
+                    return BuildJson.error("Invalid UUID");
+                }
+                PrideUser account = createAccount(req.params(":uuid"));
+                return getUser(res, account.id());
             } else return denyTransaction(res);
         });
         Spark.get("/user/:id", (req, res) -> {
-            PrideUser account = getAccount(req.params(":id"));
-            if (account == null) {
-                res.status(404);
-                return BuildJson.noSuchUser();
-            }
-            return BuildJson.user(account);
+            String params = req.params(":id");
+            return getUser(res, params);
         });
+    }
+
+    private static String getUser(Response res, String id) {
+        PrideUser account = getAccount(id);
+        if (account == null) {
+            res.status(404);
+            return BuildJson.error("User not found");
+        }
+        return BuildJson.user(account);
     }
 
     private static boolean elevatedTransaction(Request req) {
@@ -70,7 +78,7 @@ public class Main {
     @NotNull
     private static String denyTransaction(Response res) {
         res.status(401);
-        return accessDenied();
+        return BuildJson.error("Unauthorized");
     }
 
     private static void configureServer(Map<String, Object> config) {
