@@ -25,8 +25,8 @@ public class Shutdown implements SlashCommandHandler {
     }
 
     @Override
-    public void handle(SlashCommandInteractionEvent event) {
-        Map<String, Object> config = ConfigHandler.loadConfig();
+    public void handle(final SlashCommandInteractionEvent event) {
+        final Map<String, Object> config = ConfigHandler.loadConfig();
 
         if (Objects.requireNonNull(
                         event.getMember()).getId()
@@ -42,6 +42,6 @@ public class Shutdown implements SlashCommandHandler {
     }
 
     @Override
-    public void setOptions(SlashCommandData command) {
+    public void setOptions(final SlashCommandData command) {
     }
 }

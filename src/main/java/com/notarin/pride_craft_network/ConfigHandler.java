@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
 
+import static com.notarin.pride_craft_network.LogHandler.logError;
+import static com.notarin.pride_craft_network.LogHandler.logWarn;
+
 /**
  * This class handles the loading of the config file, and checking for any
  * updates to the config file.
@@ -27,11 +30,11 @@ public class ConfigHandler {
 
         try {
             //Loading config file
-            InputStream inputStream = new FileInputStream("config.yml");
-            Yaml yaml = new Yaml();
+            final InputStream inputStream = new FileInputStream("config.yml");
+            final Yaml yaml = new Yaml();
             //set the config object
             config = yaml.load(inputStream);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
@@ -46,53 +49,47 @@ public class ConfigHandler {
      *
      * @param config The config object
      */
-    public static void updateCheck(Map<String, Object> config) {
-        Map<String, Object> exampleConfig;
+    public static void updateCheck(final Map<String, Object> config) {
+        final Map<String, Object> exampleConfig;
 
         try {
             //Loading config example file
-            InputStream inputStream = new FileInputStream("config-example.yml");
-            Yaml yaml = new Yaml();
+            final InputStream inputStream = new FileInputStream("config-example.yml");
+            final Yaml yaml = new Yaml();
             //set the config object
             exampleConfig = yaml.load(inputStream);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
         //check for unconfigured values in config, or useless values in config
-        for (Map.Entry<String, Object> configIteration : config.entrySet()) {
+        for (final Map.Entry<String, Object> configIteration : config.entrySet()) {
             //Check for keys in config not present in exampleconfig,
             // this isn't really a problem so just warn.
             if (exampleConfig.get(configIteration.getKey()) == null) {
-                System.out.println(
-                        "[WARNING] " +
-                                "Key found in config not present " +
-                                "in example config: "
-                                + configIteration.getKey());
+                logWarn("ConfigHandler",
+                        "Key found in config not present in example " +
+                                "config: " + configIteration.getKey());
             }
             if (configIteration.getValue()
                     .equals(exampleConfig.get(configIteration.getKey()))) {
-                System.out.println(
-                        "[ERROR] Config value unchanged, " +
-                                "please configure key \""
+                logError("ConfigHandler",
+                        "Config value unchanged, please configure key \""
                                 + configIteration.getKey() + "\"");
-                System.exit(1);
             }
         }
 
         //check for missing keys in config
         for (
-                Map.Entry<String, Object> exampleConfigIteration :
+                final Map.Entry<String, Object> exampleConfigIteration :
                 exampleConfig.entrySet()
         ) {
             if (config.get(exampleConfigIteration.getKey()) == null) {
-                System.out.println(
-                        "[ERROR] Key found in example config " +
-                                "not present in config: "
+                logError("ConfigHandler",
+                        "Key found in example config not present in config: "
                                 + exampleConfigIteration.getKey() +
                                 "\nPlease copy all missing values and set " +
                                 "them.");
-                System.exit(1);
             }
         }
     }

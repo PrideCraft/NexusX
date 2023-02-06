@@ -22,18 +22,18 @@ public class Say implements SlashCommandHandler {
     }
 
     @Override
-    public void handle(SlashCommandInteractionEvent event) {
+    public void handle(final SlashCommandInteractionEvent event) {
         try {
             //noinspection DataFlowIssue
             event.reply(event.getOption("message").getAsString()).queue();
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             event.reply("Invalid syntax, please provide a message.")
                     .setEphemeral(true).queue();
         }
     }
 
     @Override
-    public void setOptions(SlashCommandData command) {
+    public void setOptions(final SlashCommandData command) {
         command.addOption(OptionType.STRING,
                 "message",
                 "What you wish for the bot to respond with");

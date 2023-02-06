@@ -22,27 +22,27 @@ public class EventRegistrar extends ListenerAdapter {
      *
      * @param commandList The list of slash commands
      */
-    public EventRegistrar(List<Class<?>> commandList) {
+    public EventRegistrar(final List<Class<?>> commandList) {
         this.commandList = commandList;
     }
 
     public void onSlashCommandInteraction(
-            @NotNull SlashCommandInteractionEvent event) {
+            @NotNull final SlashCommandInteractionEvent event) {
 
-        for (Class<?> clazz : commandList) {
+        for (final Class<?> clazz : commandList) {
             // Get the constructor for the class
-            Constructor<?> constructor;
+            final Constructor<?> constructor;
             try {
                 constructor = clazz.getConstructor();
-            } catch (NoSuchMethodException e) {
+            } catch (final NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
             // Create a new instance of the class
-            SlashCommandHandler command;
+            final SlashCommandHandler command;
             try {
                 command = (SlashCommandHandler) constructor.newInstance();
-            } catch (InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
+            } catch (final InstantiationException | IllegalAccessException |
+                           InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
             if (command.getName().equalsIgnoreCase(

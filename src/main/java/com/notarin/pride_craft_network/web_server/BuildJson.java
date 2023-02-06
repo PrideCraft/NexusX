@@ -13,7 +13,7 @@ public class BuildJson {
      * @param message The message to be sent
      * @return The JSON response
      */
-    public static String error(String message) {
+    public static String error(final String message) {
         return """
                 {
                   "status": "error",
@@ -28,8 +28,8 @@ public class BuildJson {
      * @param prideUser The user to be sent
      * @return The JSON response
      */
-    public static String user(PrideUser prideUser) {
-        String json = """
+    public static String user(final PrideUser prideUser) {
+        final String json = """
                 {
                   "status": "success",
                   "data": {

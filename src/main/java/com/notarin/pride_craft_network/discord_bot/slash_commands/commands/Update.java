@@ -6,10 +6,12 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,16 +32,16 @@ public class Update implements SlashCommandHandler {
     }
 
     @Override
-    public void handle(SlashCommandInteractionEvent event) {
-        Map<String, Object> config = ConfigHandler.loadConfig();
+    public void handle(final SlashCommandInteractionEvent event) {
+        final Map<String, Object> config = ConfigHandler.loadConfig();
 
         if (Objects.requireNonNull(
                         event.getMember()).getId()
                 .equals(config.get("owner-id").toString())) {
-            String dir = System.getProperty("user.dir");
-            try (Repository botRepo = new FileRepository(dir + "/.git")) {
-                Git botGit = new Git(botRepo);
-                PullCommand gitPull = botGit.pull()
+            final String dir = System.getProperty("user.dir");
+            try (final Repository botRepo = new FileRepository(dir + "/.git")) {
+                final Git botGit = new Git(botRepo);
+                final PullCommand gitPull = botGit.pull()
                         .setRemote("origin")
                         .setRemoteBranchName("main")
                         .setRebase(true)
@@ -51,8 +53,9 @@ public class Update implements SlashCommandHandler {
                         );
                 gitPull.call();
                 event.reply("Finished!").setEphemeral(true).queue();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (@SuppressWarnings("OverlyBroadCatchBlock")
+            final IOException | GitAPIException e) {
+                throw new RuntimeException(e);
             }
         } else {
             event.reply("Uh-oh, you don't seem to have the required " +
@@ -61,6 +64,6 @@ public class Update implements SlashCommandHandler {
     }
 
     @Override
-    public void setOptions(SlashCommandData command) {
+    public void setOptions(final SlashCommandData command) {
     }
 }

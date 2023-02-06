@@ -21,10 +21,10 @@ public class Ping implements SlashCommandHandler {
     }
 
     @Override
-    public void handle(SlashCommandInteractionEvent event) {
+    public void handle(final SlashCommandInteractionEvent event) {
         event.reply("Pong!").queue();
     }
 
     @Override
-    public void setOptions(SlashCommandData command) {}
+    public void setOptions(final SlashCommandData command) {}
 }

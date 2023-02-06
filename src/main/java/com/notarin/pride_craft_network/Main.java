@@ -21,7 +21,7 @@ public class Main {
      * @throws IllegalAccessException Thrown when registering slash commands
      * fails
      */
-    public static void main(String[] args) throws InvocationTargetException,
+    public static void main(final String[] args) throws InvocationTargetException,
             NoSuchMethodException, InstantiationException,
             IllegalAccessException {
         com.notarin.pride_craft_network.discord_bot.Main.init();

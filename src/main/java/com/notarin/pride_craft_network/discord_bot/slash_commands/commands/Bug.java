@@ -21,12 +21,12 @@ public class Bug implements SlashCommandHandler {
     }
 
     @Override
-    public void handle(SlashCommandInteractionEvent event) {
-        String url = "https://github.com/PrideCraft/Public-Issue-Tracker" +
+    public void handle(final SlashCommandInteractionEvent event) {
+        final String url = "https://github.com/PrideCraft/Public-Issue-Tracker" +
                 "/issues/new/choose";
         event.reply(url).queue();
     }
 
     @Override
-    public void setOptions(SlashCommandData command) {}
+    public void setOptions(final SlashCommandData command) {}
 }

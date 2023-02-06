@@ -1,8 +1,11 @@
 package com.notarin.pride_craft_network.database;
 
 import com.notarin.pride_craft_network.database.objects.PrideUser;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.Session;
+import org.neo4j.driver.Result;
 import org.neo4j.driver.Record;
-import org.neo4j.driver.*;
+import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,22 +21,22 @@ public class Query {
      * @param minecraftUuid The UUID of the Minecraft account
      * @return The created account
      */
-    public static PrideUser createAccount(String minecraftUuid) {
-        String query = """
+    public static PrideUser createAccount(final String minecraftUuid) {
+        final String query = """
                 CREATE (account:PrideAccount\s
                 {name: "Pride Account", name: $id})
                 CREATE (minecraftAccount:MinecraftAccount\s
                 {name: $MinecraftUUID})
                 CREATE (account)-[r1:OWNS]->(minecraftAccount)
                 RETURN r1, account, minecraftAccount""";
-        Map<String, Object> params = new HashMap<>();
-        String generatedId = Util.generateId();
+        final Map<String, Object> params = new HashMap<>();
+        final String generatedId = Util.generateId();
         params.put("id", generatedId);
         params.put("MinecraftUUID", minecraftUuid);
-        Driver driver = Util.openConnection();
-        try (Session session = driver.session()) {
-            Result run = session.run(query, params);
-            Record record = run.single();
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
             return Util.parsePrideUserFromRecord(generatedId, record);
         }
     }
@@ -44,19 +47,21 @@ public class Query {
      * @param prideId The ID of the account
      * @return The account
      */
-    public static PrideUser getAccount(String prideId) {
-        String query = """
+    public static PrideUser getAccount(final String prideId) {
+        final String query = """
                 MATCH r=(account:PrideAccount\s
                 {name: $id})-->(minecraftAccount:MinecraftAccount)\s
                 RETURN r, account, minecraftAccount""";
-        Map<String, Object> params = new HashMap<>();
+        final Map<String, Object> params = new HashMap<>();
         params.put("id", prideId);
-        Driver driver = Util.openConnection();
-        try (Session session = driver.session()) {
-            Result run = session.run(query, params);
-            Record record = run.single();
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
             return Util.parsePrideUserFromRecord(prideId, record);
-        } catch (Exception e) {
+        } catch (final NoSuchRecordException e) {
+            throw new RuntimeException(e);
+        } catch (final RuntimeException e) {
             return null;
         }
     }
