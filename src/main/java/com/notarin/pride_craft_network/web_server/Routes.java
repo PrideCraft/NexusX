@@ -3,7 +3,7 @@ package com.notarin.pride_craft_network.web_server;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import spark.Spark;
 
-import static com.notarin.pride_craft_network.database.Query.createAccount;
+import static com.notarin.pride_craft_network.database.Query.createAccountByUUID;
 
 /**
  * The routes class for the web server.
@@ -18,7 +18,7 @@ public class Routes {
                     res.status(400);
                     return BuildJson.error("Invalid UUID");
                 }
-                final PrideUser account = createAccount(req.params(":uuid"));
+                final PrideUser account = createAccountByUUID(req.params(":uuid"));
                 return Main.getUserByPrideId(res, account.id());
             } else return Main.denyTransaction(res);
         });
