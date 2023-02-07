@@ -3,7 +3,7 @@ package com.notarin.pride_craft_network.web_server;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import spark.Spark;
 
-import static com.notarin.pride_craft_network.database.Query.createAccountByUUID;
+import static com.notarin.pride_craft_network.database.Query.*;
 
 /**
  * The routes class for the web server.
@@ -24,6 +24,20 @@ public class Routes {
         });
     }
 
+    static void makeUserFromDiscordId() {
+        Spark.post("/make-user/discord-id/:id", (req, res) -> {
+            if (Main.elevatedTransaction(req)) {
+                final String regex = "^[0-9]{18}$";
+                if (!req.params(":id").matches(regex)) {
+                    res.status(400);
+                    return BuildJson.error("Invalid Discord ID");
+                }
+                final PrideUser account = createAccountByDiscordId(req.params(":id"));
+                return Main.getUserByPrideId(res, account.id());
+            } else return Main.denyTransaction(res);
+        });
+    }
+
     static void getUser() {
         Spark.get("/user/:id", (req, res) -> {
             final String params = req.params(":id");
@@ -34,7 +48,24 @@ public class Routes {
     static void getUserFromMinecraftUuid() {
         Spark.get("/uuid/:uuid", (req, res) -> {
             final String params = req.params(":uuid");
-            return Main.getUserByMinecraftUuid(res, params);
+            final PrideUser account = getAccountByUUID(params);
+            if (account == null) {
+                res.status(404);
+                return BuildJson.error("User not found");
+            }
+            return BuildJson.user(account);
+        });
+    }
+
+    static void getUserFromDiscordId() {
+        Spark.get("/discord/:id", (req, res) -> {
+            final String params = req.params(":id");
+            final PrideUser account = getAccountByDiscordId(params);
+            if (account == null) {
+                res.status(404);
+                return BuildJson.error("User not found");
+            }
+            return BuildJson.user(account);
         });
     }
 
