@@ -16,12 +16,12 @@ import java.util.Map;
 public class Query {
 
     /**
-     * Creates a new account in the database.
+     * Creates a new account in the database using a minecraft UUID.
      *
      * @param minecraftUuid The UUID of the Minecraft account
      * @return The created account
      */
-    public static PrideUser createAccount(final String minecraftUuid) {
+    public static PrideUser createAccountByUUID(final String minecraftUuid) {
         final String query = """
                 CREATE (account:PrideAccount\s
                 {name: "Pride Account", name: $id})
