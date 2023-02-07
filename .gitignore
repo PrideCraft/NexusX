@@ -45,6 +45,8 @@ gradle-app.setting
 out/
 .idea/dbnavigator.xml
 .idea_modules/
+.idea/uiDesigner.xml
+.idea/workspace.xml
 *.iml
 *.ipr
 *.iws
