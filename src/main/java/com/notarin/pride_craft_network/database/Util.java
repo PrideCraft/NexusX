@@ -79,6 +79,7 @@ public class Util {
     static PrideUser parsePrideUserFromRecord(final Record record) {
         String minecraftUuid = null;
         String prideId = null;
+        String discordId = null;
         for (final Value value : record.values()) {
             final boolean node = value.type().name().equals("NODE");
             if (node && value.asNode().hasLabel("MinecraftAccount")) {
@@ -87,11 +88,15 @@ public class Util {
             } else if (node && value.asNode().hasLabel("PrideAccount")) {
                 final Value name = value.asNode().get("name");
                 prideId = name.asString();
+            } else if (node && value.asNode().hasLabel("DiscordAccount")) {
+                final Value name = value.asNode().get("name");
+                discordId = name.asString();
             }
         }
         return new PrideUser(
                 prideId,
-                minecraftUuid
+                minecraftUuid,
+                discordId
         );
     }
 }

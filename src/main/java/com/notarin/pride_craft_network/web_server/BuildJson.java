@@ -34,10 +34,11 @@ public class BuildJson {
                   "status": "success",
                   "data": {
                     "id": "%s",
-                    "minecraftUuid": "%s"
+                    "minecraftUuid": "%s",
+                    "discordId": "%s"
                   }
                 }""";
-        return String.format(json, prideUser.id(), prideUser.minecraftUuid());
+        return String.format(json, prideUser.id(), prideUser.minecraftUuid(), prideUser.discordId());
     }
 
 }
