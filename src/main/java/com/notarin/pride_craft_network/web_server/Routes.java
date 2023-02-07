@@ -10,6 +10,9 @@ import static com.notarin.pride_craft_network.database.Query.*;
  * This class contains all the routes for the web server.
  */
 public class Routes {
+    /**
+     * This route is used to create an account from a Minecraft UUID.
+     */
     static void makeUserFromMinecraftUuid() {
         Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
             if (Main.elevatedTransaction(req)) {
@@ -24,6 +27,9 @@ public class Routes {
         });
     }
 
+    /**
+     * This route is used to create an account from a Discord ID.
+     */
     static void makeUserFromDiscordId() {
         Spark.post("/make-user/discord-id/:id", (req, res) -> {
             if (Main.elevatedTransaction(req)) {
@@ -38,6 +44,9 @@ public class Routes {
         });
     }
 
+    /**
+     * This route is used to get a user from their Pride ID.
+     */
     static void getUser() {
         Spark.get("/user/:id", (req, res) -> {
             final String params = req.params(":id");
@@ -45,6 +54,9 @@ public class Routes {
         });
     }
 
+    /**
+     * This route is used to get a user from their Minecraft UUID.
+     */
     static void getUserFromMinecraftUuid() {
         Spark.get("/uuid/:uuid", (req, res) -> {
             final String params = req.params(":uuid");
@@ -57,6 +69,9 @@ public class Routes {
         });
     }
 
+    /**
+     * This route is used to get a user from their Discord ID.
+     */
     static void getUserFromDiscordId() {
         Spark.get("/discord/:id", (req, res) -> {
             final String params = req.params(":id");
@@ -69,6 +84,9 @@ public class Routes {
         });
     }
 
+    /**
+     * This route pings the server to check if it is online.
+     */
     static void ping() {
         Spark.get("/ping", (req, res) -> "Pong!");
     }
