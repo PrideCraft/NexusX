@@ -97,16 +97,16 @@ public class Query {
     /**
      * Gets an account from the database using a minecraft UUID.
      *
-     * @param UUID The UUID of the Minecraft account
+     * @param uuid The UUID of the Minecraft account
      * @return The account
      */
-    public static PrideUser getAccountByUUID(final String UUID) {
+    public static PrideUser getAccountByUUID(final String uuid) {
         final String query = """
                 MATCH r=(account:PrideAccount)-->(minecraftAccount:MinecraftAccount\s
                 {name: $UUID})\s
                 RETURN r, account""";
         final Map<String, Object> params = new HashMap<>();
-        params.put("UUID", UUID);
+        params.put("UUID", uuid);
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
@@ -121,16 +121,16 @@ public class Query {
     /**
      * Gets an account from the database using a discord ID.
      *
-     * @param DiscordId The ID of the Discord account
+     * @param discordId The ID of the Discord account
      * @return The account
      */
-    public static PrideUser getAccountByDiscordId(final String DiscordId) {
+    public static PrideUser getAccountByDiscordId(final String discordId) {
         final String query = """
                 MATCH r=(account:PrideAccount)-->(discordAccount:DiscordAccount\s
                 {name: $DiscordId})\s
                 RETURN account""";
         final Map<String, Object> params = new HashMap<>();
-        params.put("DiscordId", DiscordId);
+        params.put("DiscordId", discordId);
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
@@ -146,10 +146,10 @@ public class Query {
      * Links a Minecraft UUID to an account.
      *
      * @param account This is the account that is being linked
-     * @param UUID The new Minecraft UUID to be linked
+     * @param uuid The new Minecraft UUID to be linked
      * @return Whether the link was successful
      */
-    public static Boolean linkUUIDQuery(final PrideUser account, final String UUID) {
+    public static Boolean linkUUIDQuery(final PrideUser account, final String uuid) {
         final String query = """
                 MATCH (account:PrideAccount {name: $id})
                 MERGE (minecraftAccount:MinecraftAccount\s
@@ -158,7 +158,7 @@ public class Query {
                 """;
         final Map<String, Object> params = new HashMap<>();
         params.put("id", account.id());
-        params.put("UUID", UUID);
+        params.put("UUID", uuid);
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             session.run(query, params);
@@ -172,10 +172,10 @@ public class Query {
      * Links a Discord ID to an account.
      *
      * @param account This is the account that is being linked
-     * @param DiscordId The new Discord ID to be linked
+     * @param discordId The new Discord ID to be linked
      * @return Whether the link was successful
      */
-    public static Boolean linkDiscordIdQuery(final PrideUser account, final String DiscordId) {
+    public static Boolean linkDiscordIdQuery(final PrideUser account, final String discordId) {
         final String query = """
                 MATCH (account:PrideAccount {name: $id})
                 MERGE (discordAccount:DiscordAccount\s
@@ -184,7 +184,7 @@ public class Query {
                 """;
         final Map<String, Object> params = new HashMap<>();
         params.put("id", account.id());
-        params.put("DiscordId", DiscordId);
+        params.put("DiscordId", discordId);
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             session.run(query, params);
