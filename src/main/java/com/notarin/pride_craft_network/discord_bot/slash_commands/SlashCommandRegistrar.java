@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * A class for registering slash commands.
  */
-public abstract class SlashCommandRegistrar {
+public class SlashCommandRegistrar {
     /**
      * Registers the slash commands.
      *
