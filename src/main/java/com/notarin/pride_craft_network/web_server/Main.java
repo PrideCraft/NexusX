@@ -46,6 +46,7 @@ public class Main {
         Routes.getUser();
         Routes.getUserFromMinecraftUuid();
         Routes.getUserFromDiscordId();
+        Routes.linkAccount();
     }
 
     static String getUserByPrideId(final Response res, final String id) {

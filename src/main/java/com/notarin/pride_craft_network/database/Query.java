@@ -142,4 +142,56 @@ public class Query {
         }
     }
 
+    /**
+     * Links a Minecraft UUID to an account.
+     *
+     * @param account This is the account that is being linked
+     * @param UUID The new Minecraft UUID to be linked
+     * @return Whether the link was successful
+     */
+    public static Boolean linkUUIDQuery(final PrideUser account, final String UUID) {
+        final String query = """
+                MATCH (account:PrideAccount {name: $id})
+                MERGE (minecraftAccount:MinecraftAccount\s
+                {name: $UUID})
+                CREATE (account)-[r1:OWNS]->(minecraftAccount)
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("id", account.id());
+        params.put("UUID", UUID);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            session.run(query, params);
+            return true;
+        } catch (final NoSuchRecordException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Links a Discord ID to an account.
+     *
+     * @param account This is the account that is being linked
+     * @param DiscordId The new Discord ID to be linked
+     * @return Whether the link was successful
+     */
+    public static Boolean linkDiscordIdQuery(final PrideUser account, final String DiscordId) {
+        final String query = """
+                MATCH (account:PrideAccount {name: $id})
+                MERGE (discordAccount:DiscordAccount\s
+                {name: $DiscordId})
+                CREATE (account)-[r1:OWNS]->(discordAccount)
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("id", account.id());
+        params.put("DiscordId", DiscordId);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            session.run(query, params);
+            return true;
+        } catch (final NoSuchRecordException e) {
+            return false;
+        }
+    }
+
 }
