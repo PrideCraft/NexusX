@@ -53,9 +53,9 @@ public class Main {
         final PrideUser account = getAccount(id);
         if (account == null) {
             res.status(404);
-            return BuildJson.error("User not found");
+            return BuildYaml.error("User not found");
         }
-        return BuildJson.user(account);
+        return BuildYaml.user(account);
     }
 
     static boolean elevatedTransaction(final Request req) {
@@ -74,7 +74,7 @@ public class Main {
     @NotNull
     static String denyTransaction(final Response res) {
         res.status(401);
-        return BuildJson.error("Unauthorized");
+        return BuildYaml.error("Unauthorized");
     }
 
     private static void configureServer(final Map<String, Object> config) {
