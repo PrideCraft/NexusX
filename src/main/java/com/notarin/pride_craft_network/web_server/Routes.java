@@ -36,7 +36,7 @@ public class Routes {
                         "-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
                 if (!req.params(":uuid").matches(regex)) {
                     res.status(400);
-                    return BuildJson.error("Invalid UUID");
+                    return BuildYaml.error("Invalid UUID");
                 }
                 final PrideUser account = createAccountByUUID(req.params(
                         ":uuid"));
@@ -54,7 +54,7 @@ public class Routes {
                 final String regex = "^[0-9]{18}$";
                 if (!req.params(":id").matches(regex)) {
                     res.status(400);
-                    return BuildJson.error("Invalid Discord ID");
+                    return BuildYaml.error("Invalid Discord ID");
                 }
                 final PrideUser account =
                         createAccountByDiscordId(req.params(":id"));
@@ -82,9 +82,9 @@ public class Routes {
             final PrideUser account = getAccountByUUID(params);
             if (account == null) {
                 res.status(404);
-                return BuildJson.error("User not found");
+                return BuildYaml.error("User not found");
             }
-            return BuildJson.user(account);
+            return BuildYaml.user(account);
         });
     }
 
@@ -97,9 +97,9 @@ public class Routes {
             final PrideUser account = getAccountByDiscordId(params);
             if (account == null) {
                 res.status(404);
-                return BuildJson.error("User not found");
+                return BuildYaml.error("User not found");
             }
-            return BuildJson.user(account);
+            return BuildYaml.user(account);
         });
     }
 
@@ -132,29 +132,29 @@ public class Routes {
                     }
                 } catch (final NullPointerException e) {
                     res.status(400);
-                    return BuildJson.error("Invalid body");
+                    return BuildYaml.error("Invalid body");
                 }
                 final PrideUser account = getAccount(prideId);
                 if (account == null) {
                     res.status(404);
-                    return BuildJson.error("Please specify a valid Pride ID");
+                    return BuildYaml.error("Please specify a valid Pride ID");
                 }
                 // Link the UUID
                 if (uuid != null) {
                     if (account.minecraftUuid() != null) {
                         res.status(400);
-                        return BuildJson.error("This account already has a " +
+                        return BuildYaml.error("This account already has a " +
                                 "UUID linked");
                     }
                     if (getAccountByUUID(uuid) != null) {
                         res.status(400);
-                        return BuildJson.error("This UUID is already linked " +
+                        return BuildYaml.error("This UUID is already linked " +
                                 "to an account");
                     }
                     final Boolean result = linkUUIDQuery(account, uuid);
                     if (!result) {
                         res.status(500);
-                        return BuildJson.error("An error occurred while " +
+                        return BuildYaml.error("An error occurred while " +
                                 "linking the UUID");
                     }
                 }
@@ -162,19 +162,19 @@ public class Routes {
                 if (discordId != null) {
                     if (account.discordId() != null) {
                         res.status(400);
-                        return BuildJson.error("This account already has a " +
+                        return BuildYaml.error("This account already has a " +
                                 "Discord ID linked");
                     }
                     if (getAccountByDiscordId(discordId) != null) {
                         res.status(400);
-                        return BuildJson.error("This Discord ID is already " +
+                        return BuildYaml.error("This Discord ID is already " +
                                 "linked to an account");
                     }
                     final Boolean result = linkDiscordIdQuery(account,
                             discordId);
                     if (!result) {
                         res.status(500);
-                        return BuildJson.error("An error occurred while " +
+                        return BuildYaml.error("An error occurred while " +
                                 "linking the Discord ID");
                     }
                 }
@@ -184,7 +184,7 @@ public class Routes {
                 // No worries of exception, this is always set, alright?
                 // Nullness is but a myth, this code is rock solid, trust.
                 assert reloadedAccount != null;
-                return BuildJson.user(reloadedAccount);
+                return BuildYaml.user(reloadedAccount);
             }
             return Main.denyTransaction(res);
         });
