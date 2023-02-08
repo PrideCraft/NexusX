@@ -95,85 +95,77 @@ public class Routes {
      */
     static void linkAccount() {
         Spark.post("/link/", (req, res) -> {
-            if (Main.elevatedTransaction(req)) {
-                final String body = req.body();
-                final Yaml yaml = new Yaml();
-                final Map<String, Object> map = yaml.load(body);
-                final String prideId;
-                final String uuid;
-                final String discordId;
-                // Check if the body is valid
-                try {
-                    prideId = (String) map.get("Pride-ID");
-                    if (prideId == null) {
-                        throw new NullPointerException();
-                    }
-                    uuid = (String) map.get("UUID");
-                    final Long preDiscordId = (Long) map.get("Discord-ID");
-                    // Ternary operator in Java.
-                    // It's a shorthand way of writing an if-else statement.
-                    discordId = (preDiscordId != null) ?
-                            preDiscordId.toString() : null;
-                    if (uuid == null && discordId == null) {
-                        throw new NullPointerException();
-                    }
-                } catch (final NullPointerException e) {
-                    res.status(400);
-                    return BuildYaml.error("Invalid body");
-                }
-                final PrideUser account = getAccount(prideId);
-                if (account == null) {
-                    res.status(404);
-                    return BuildYaml.error("Please specify a valid Pride ID");
-                }
-                // Link the UUID
-                if (uuid != null) {
-                    if (account.minecraftUuid() != null) {
-                        res.status(400);
-                        return BuildYaml.error("This account already has a " +
-                                "UUID linked");
-                    }
-                    if (getAccountByUUID(uuid) != null) {
-                        res.status(400);
-                        return BuildYaml.error("This UUID is already linked " +
-                                "to an account");
-                    }
-                    final Boolean result = linkUUIDQuery(account, uuid);
-                    if (!result) {
-                        res.status(500);
-                        return BuildYaml.error("An error occurred while " +
-                                "linking the UUID");
-                    }
-                }
-                // Link the Discord ID
-                if (discordId != null) {
-                    if (account.discordId() != null) {
-                        res.status(400);
-                        return BuildYaml.error("This account already has a " +
-                                "Discord ID linked");
-                    }
-                    if (getAccountByDiscordId(discordId) != null) {
-                        res.status(400);
-                        return BuildYaml.error("This Discord ID is already " +
-                                "linked to an account");
-                    }
-                    final Boolean result = linkDiscordIdQuery(account,
-                            discordId);
-                    if (!result) {
-                        res.status(500);
-                        return BuildYaml.error("An error occurred while " +
-                                "linking the Discord ID");
-                    }
-                }
-
-                // Reload the account, then return it
-                final PrideUser reloadedAccount = getAccount(prideId);
-                // No worries of exception, this is always set, alright?
-                // Nullness is but a myth, this code is rock solid, trust.
-                assert reloadedAccount != null;
-                return BuildYaml.user(reloadedAccount);
+            if (!Main.elevatedTransaction(req)) {
+                return Main.denyTransaction(res);
             }
-            return Main.denyTransaction(res);
+
+            final String body = req.body();
+            final Yaml yaml = new Yaml();
+            final Map<String, Object> map = yaml.load(body);
+            final String prideId = (String) map.get("Pride-ID");
+            final String uuid = (String) map.get("UUID");
+            final String discordId = map.get("Discord-ID") != null ? ((Long) map.get("Discord-ID")).toString() : null;
+            final PrideUser account = getAccount(prideId);
+
+            // Check if the body is valid
+            if (prideId == null || (uuid == null && discordId == null)) {
+                res.status(400);
+                return BuildYaml.error("Invalid body");
+            }
+
+            // Check if the account exists
+            if (account == null) {
+                res.status(404);
+                return BuildYaml.error("Please specify a valid Pride ID");
+            }
+
+            // Link the UUID
+            if (uuid != null) {
+                if (account.minecraftUuid() != null) {
+                    res.status(400);
+                    return BuildYaml.error("This account already has a " +
+                            "UUID linked");
+                }
+                if (getAccountByUUID(uuid) != null) {
+                    res.status(400);
+                    return BuildYaml.error("This UUID is already linked " +
+                            "to an account");
+                }
+                final Boolean result = linkUUIDQuery(account, uuid);
+                if (!result) {
+                    res.status(500);
+                    return BuildYaml.error("An error occurred while " +
+                            "linking the UUID");
+                }
+            }
+
+            // Link the Discord ID
+            if (discordId != null) {
+                if (account.discordId() != null) {
+                    res.status(400);
+                    return BuildYaml.error("This account already has a " +
+                            "Discord ID linked");
+                }
+                if (getAccountByDiscordId(discordId) != null) {
+                    res.status(400);
+                    return BuildYaml.error("This Discord ID is already " +
+                            "linked to an account");
+                }
+                final Boolean result = linkDiscordIdQuery(account,
+                        discordId);
+                if (!result) {
+                    res.status(500);
+                    return BuildYaml.error("An error occurred while " +
+                            "linking the Discord ID");
+                }
+            }
+
+            // Reload the account, then return it
+            final PrideUser reloadedAccount = getAccount(prideId);
+            // No worries of exception, this is always set, alright?
+            // Nullness is but a myth, this code is rock solid, trust.
+            assert reloadedAccount != null;
+            return BuildYaml.user(reloadedAccount);
         });
     }
 
