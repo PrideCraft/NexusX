@@ -1,7 +1,7 @@
 package com.notarin.pride_craft_network;
 
 /**
- * This class contains all of the regex statements used in the project.
+ * This class contains all the regex statements used in the project.
  */
 public class Regex {
 
