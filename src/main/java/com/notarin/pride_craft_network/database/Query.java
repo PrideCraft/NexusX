@@ -8,6 +8,7 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -134,7 +135,16 @@ public class Query {
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
-            final Record record = run.single();
+            final List<Record> records = run.list();
+            // Check if there are multiple accounts with the same discord ID
+            if (records.size() > 1) {
+                throw new IllegalStateException("There are multiple accounts " +
+                        "with the same discord ID");
+            }
+            if (records.isEmpty()) {
+                return null;
+            }
+            final Record record = records.get(0);
             final String userId = record.get("account").get("name").asString();
             return getAccount(userId);
         } catch (final NoSuchRecordException e) {
@@ -146,10 +156,11 @@ public class Query {
      * Links a Minecraft UUID to an account.
      *
      * @param account This is the account that is being linked
-     * @param uuid The new Minecraft UUID to be linked
+     * @param uuid    The new Minecraft UUID to be linked
      * @return Whether the link was successful
      */
-    public static Boolean linkUUIDQuery(final PrideUser account, final String uuid) {
+    public static Boolean linkUUIDQuery(final PrideUser account,
+                                        final String uuid) {
         final String query = """
                 MATCH (account:PrideAccount {name: $id})
                 MERGE (minecraftAccount:MinecraftAccount\s
@@ -171,11 +182,12 @@ public class Query {
     /**
      * Links a Discord ID to an account.
      *
-     * @param account This is the account that is being linked
+     * @param account   This is the account that is being linked
      * @param discordId The new Discord ID to be linked
      * @return Whether the link was successful
      */
-    public static Boolean linkDiscordIdQuery(final PrideUser account, final String discordId) {
+    public static Boolean linkDiscordIdQuery(final PrideUser account,
+                                             final String discordId) {
         final String query = """
                 MATCH (account:PrideAccount {name: $id})
                 MERGE (discordAccount:DiscordAccount\s
