@@ -1,5 +1,6 @@
 package com.notarin.pride_craft_network.web_server;
 
+import com.notarin.pride_craft_network.Regex;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import org.yaml.snakeyaml.Yaml;
 import spark.Spark;
@@ -19,21 +20,7 @@ public class Routes {
     static void makeUserFromMinecraftUuid() {
         Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
             if (Main.elevatedTransaction(req)) {
-                // This regex statement uses twelve steps to validate the UUID.
-                // 1. The first eight characters must be a-f, A-F, or 0-9.
-                // 2. The next character must be a dash.
-                // 3. The next four characters must be a-f, A-F, or 0-9.
-                // 4. The next character must be a dash.
-                // 5. The next four characters must be a-f, A-F, or 0-9.
-                // 6. The next character must be a dash.
-                // 7. The next four characters must be a-f, A-F, or 0-9.
-                // 8. The next character must be a dash.
-                // 9. The next four characters must be a-f, A-F, or 0-9.
-                // 10. The next character must be a dash.
-                // 11. The next twelve characters must be a-f, A-F, or 0-9.
-                // 12. The string must end.
-                final String regex = "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0" +
-                        "-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$";
+                final String regex = Regex.uuidValidate;
                 if (!req.params(":uuid").matches(regex)) {
                     res.status(400);
                     return BuildYaml.error("Invalid UUID");
@@ -51,7 +38,7 @@ public class Routes {
     static void makeUserFromDiscordId() {
         Spark.post("/make-user/discord-id/:id", (req, res) -> {
             if (Main.elevatedTransaction(req)) {
-                final String regex = "^[0-9]{18}$";
+                final String regex = Regex.discordIdValidate;
                 if (!req.params(":id").matches(regex)) {
                     res.status(400);
                     return BuildYaml.error("Invalid Discord ID");
