@@ -25,7 +25,7 @@ public class Query {
     public static PrideUser createAccountByUUID(final String minecraftUuid) {
         final String query = """
                 CREATE (account:PrideAccount\s
-                {name: "Pride Account", name: $id})
+                {name: "Pride Account", name: $id, secret: $secret})
                 CREATE (minecraftAccount:MinecraftAccount\s
                 {name: $MinecraftUUID})
                 CREATE (account)-[r1:OWNS]->(minecraftAccount)
@@ -34,6 +34,7 @@ public class Query {
         final String generatedId = Util.generateId();
         params.put("id", generatedId);
         params.put("MinecraftUUID", minecraftUuid);
+        params.put("secret", Util.generateSecret());
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
@@ -51,7 +52,7 @@ public class Query {
     public static PrideUser createAccountByDiscordId(final String discordId) {
         final String query = """
                 CREATE (account:PrideAccount\s
-                {name: "Pride Account", name: $id})
+                {name: "Pride Account", name: $id, secret: $secret})
                 CREATE (discordAccount:DiscordAccount\s
                 {name: $DiscordId})
                 CREATE (account)-[r1:OWNS]->(discordAccount)
@@ -60,6 +61,7 @@ public class Query {
         final String generatedId = Util.generateId();
         params.put("id", generatedId);
         params.put("DiscordId", discordId);
+        params.put("secret", Util.generateSecret());
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
