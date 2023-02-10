@@ -48,6 +48,26 @@ public class BuildYaml {
         return yaml.dump(map);
     }
 
+    /**
+     * Builds a YAML response for the secret.
+     * This is used for the /secret route.
+     *
+     * @param prideUser The user to return the secret for
+     * @return The YAML response
+     */
+    public static String secret(final PrideUser prideUser) {
+        final Map<String, Object> map = new HashMap<>();
+        final Map<String, Object> data = new HashMap<>();
+        map.put("status", "success");
+        {
+            data.put("id", prideUser.id());
+            data.put("secret", prideUser.secret());
+        }
+        map.put("data", data);
+        final Yaml yaml = Yaml();
+        return yaml.dump(map);
+    }
+
     @NotNull
     private static Yaml Yaml() {
         final DumperOptions options = new DumperOptions();
