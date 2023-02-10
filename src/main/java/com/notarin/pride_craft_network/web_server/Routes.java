@@ -7,7 +7,13 @@ import spark.Spark;
 
 import java.util.Map;
 
-import static com.notarin.pride_craft_network.database.Query.*;
+import static com.notarin.pride_craft_network.database.Query.createAccountByDiscordId;
+import static com.notarin.pride_craft_network.database.Query.createAccountByUUID;
+import static com.notarin.pride_craft_network.database.Query.getAccount;
+import static com.notarin.pride_craft_network.database.Query.getAccountByDiscordId;
+import static com.notarin.pride_craft_network.database.Query.getAccountByUUID;
+import static com.notarin.pride_craft_network.database.Query.linkDiscordIdQuery;
+import static com.notarin.pride_craft_network.database.Query.linkUUIDQuery;
 
 /**
  * The routes class for the web server.
@@ -166,6 +172,23 @@ public class Routes {
             // Nullness is but a myth, this code is rock solid, trust.
             assert reloadedAccount != null;
             return BuildYaml.user(reloadedAccount);
+        });
+    }
+
+    /**
+     * This route is used to get the secret of a user.
+     */
+    static void getSecret() {
+        Spark.get("/secret/:id", (req, res) -> {
+            if (Main.elevatedTransaction(req)) {
+                final String params = req.params(":id");
+                final PrideUser account = getAccount(params);
+                if (account == null) {
+                    res.status(404);
+                    return BuildYaml.error("User not found");
+                }
+                return BuildYaml.secret(account);
+            } else return Main.denyTransaction(res);
         });
     }
 
