@@ -1,0 +1,33 @@
+<!-- Logback configuration file -->
+<configuration>
+
+    <!-- Define the FileAppender to log to the console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level %logger{360} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Define the FileAppender to log to a file -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/latest.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Define logging levels for specific packages -->
+    <logger name="Main" level="INFO"/>
+    <logger name="ConfigHandler" level="INFO" />
+    <logger name="WebServer" level="INFO" />
+
+    <!-- Register the appenders to the logger, we'll use WARN for all
+    packages and above here we defined INFO for our packages -->
+    <root level="WARN">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
