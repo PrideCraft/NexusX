@@ -17,24 +17,20 @@ import java.util.Map;
 public class Query {
 
     /**
-     * Creates a new account in the database using a minecraft UUID.
+     * Creates a new account in the database.
      *
-     * @param minecraftUuid The UUID of the Minecraft account
-     * @return The created account
+     * @return The account created
      */
-    public static PrideUser createAccountByUUID(final String minecraftUuid) {
+    public static PrideUser createAccount() {
         final String query = """
                 CREATE (account:PrideAccount\s
                 {name: "Pride Account", name: $id, secret: $secret})
-                CREATE (minecraftAccount:MinecraftAccount\s
-                {name: $MinecraftUUID})
-                CREATE (account)-[r1:OWNS]->(minecraftAccount)
-                RETURN r1, account, minecraftAccount""";
+                RETURN account""";
         final Map<String, Object> params = new HashMap<>();
         final String generatedId = Util.generateId();
+        final String secret = Util.generateSecret();
         params.put("id", generatedId);
-        params.put("MinecraftUUID", minecraftUuid);
-        params.put("secret", Util.generateSecret());
+        params.put("secret", secret);
         final Driver driver = Util.openConnection();
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
@@ -42,34 +38,6 @@ public class Query {
             return Util.parsePrideUserFromRecord(record);
         }
     }
-
-    /**
-     * Creates a new account in the database using a discord ID.
-     *
-     * @param discordId The ID of the Discord account
-     * @return The created account
-     */
-    public static PrideUser createAccountByDiscordId(final String discordId) {
-        final String query = """
-                CREATE (account:PrideAccount\s
-                {name: "Pride Account", name: $id, secret: $secret})
-                CREATE (discordAccount:DiscordAccount\s
-                {name: $DiscordId})
-                CREATE (account)-[r1:OWNS]->(discordAccount)
-                RETURN r1, account, discordAccount""";
-        final Map<String, Object> params = new HashMap<>();
-        final String generatedId = Util.generateId();
-        params.put("id", generatedId);
-        params.put("DiscordId", discordId);
-        params.put("secret", Util.generateSecret());
-        final Driver driver = Util.openConnection();
-        try (final Session session = driver.session()) {
-            final Result run = session.run(query, params);
-            final Record record = run.single();
-            return Util.parsePrideUserFromRecord(record);
-        }
-    }
-
 
     /**
      * Gets an account from the database using a pride ID.
