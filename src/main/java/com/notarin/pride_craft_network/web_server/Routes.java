@@ -24,6 +24,7 @@ public class Routes {
      */
     static void makeUserFromMinecraftUuid() {
         Spark.post("/make-user/minecraft-uuid/:uuid", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
             if (Main.elevatedTransaction(req)) {
                 final String regex = Regex.uuidValidate;
                 if (!req.params(":uuid").matches(regex)) {
@@ -46,6 +47,7 @@ public class Routes {
      */
     static void makeUserFromDiscordId() {
         Spark.post("/make-user/discord-id/:id", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
             if (Main.elevatedTransaction(req)) {
                 final String regex = Regex.discordIdValidate;
                 if (!req.params(":id").matches(regex)) {
@@ -68,6 +70,7 @@ public class Routes {
      */
     static void getUser() {
         Spark.get("/user/:id", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
             final String params = req.params(":id");
             return Main.getUserByPrideId(res, params);
         });
@@ -78,6 +81,7 @@ public class Routes {
      */
     static void getUserFromMinecraftUuid() {
         Spark.get("/uuid/:uuid", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
             final String params = req.params(":uuid");
             final PrideUser account = getAccountByUUID(params);
             if (account == null) {
@@ -93,6 +97,7 @@ public class Routes {
      */
     static void getUserFromDiscordId() {
         Spark.get("/discord/:id", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
             final String params = req.params(":id");
             final PrideUser account = getAccountByDiscordId(params);
             if (account == null) {
@@ -108,6 +113,7 @@ public class Routes {
      */
     static void linkAccount() {
         Spark.post("/link/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
             if (!Main.elevatedTransaction(req)) {
                 return Main.denyTransaction(res);
             }
@@ -187,6 +193,7 @@ public class Routes {
      */
     static void getSecret() {
         Spark.get("/secret/:id", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
             if (Main.elevatedTransaction(req)) {
                 final String params = req.params(":id");
                 final PrideUser account = getAccount(params);
