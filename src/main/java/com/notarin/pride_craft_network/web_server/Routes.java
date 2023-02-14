@@ -7,8 +7,7 @@ import spark.Spark;
 
 import java.util.Map;
 
-import static com.notarin.pride_craft_network.database.Query.createAccountByDiscordId;
-import static com.notarin.pride_craft_network.database.Query.createAccountByUUID;
+import static com.notarin.pride_craft_network.database.Query.createAccount;
 import static com.notarin.pride_craft_network.database.Query.getAccount;
 import static com.notarin.pride_craft_network.database.Query.getAccountByDiscordId;
 import static com.notarin.pride_craft_network.database.Query.getAccountByUUID;
@@ -31,9 +30,13 @@ public class Routes {
                     res.status(400);
                     return BuildYaml.error("Invalid UUID");
                 }
-                final PrideUser account = createAccountByUUID(req.params(
-                        ":uuid"));
-                return Main.getUserByPrideId(res, account.id());
+                final PrideUser account = createAccount();
+                if (linkUUIDQuery(account, req.params(":uuid"))) {
+                    return Main.getUserByPrideId(res, account.id());
+                } else {
+                    res.status(500);
+                    return BuildYaml.error("Failed to link UUID");
+                }
             } else return Main.denyTransaction(res);
         });
     }
@@ -49,9 +52,13 @@ public class Routes {
                     res.status(400);
                     return BuildYaml.error("Invalid Discord ID");
                 }
-                final PrideUser account =
-                        createAccountByDiscordId(req.params(":id"));
-                return Main.getUserByPrideId(res, account.id());
+                final PrideUser account = createAccount();
+                if (linkDiscordIdQuery(account, req.params(":id"))) {
+                    return Main.getUserByPrideId(res, account.id());
+                } else {
+                    res.status(500);
+                    return BuildYaml.error("Failed to link Discord ID");
+                }
             } else return Main.denyTransaction(res);
         });
     }
