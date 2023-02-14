@@ -135,7 +135,7 @@ public class Query {
                 MATCH (account:PrideAccount {name: $id})
                 MERGE (minecraftAccount:MinecraftAccount\s
                 {name: $UUID})
-                CREATE (account)-[r1:OWNS]->(minecraftAccount)
+                CREATE (account)-[r1:OWNS {since: datetime()}]->(minecraftAccount)
                 """;
         final Map<String, Object> params = new HashMap<>();
         params.put("id", account.id());
@@ -162,7 +162,7 @@ public class Query {
                 MATCH (account:PrideAccount {name: $id})
                 MERGE (discordAccount:DiscordAccount\s
                 {name: $DiscordId})
-                CREATE (account)-[r1:OWNS]->(discordAccount)
+                CREATE (account)-[r1:OWNS {since: datetime()}]->(discordAccount)
                 """;
         final Map<String, Object> params = new HashMap<>();
         params.put("id", account.id());
