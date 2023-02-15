@@ -1,10 +1,13 @@
 package com.notarin.pride_craft_network.web_server;
 
 import com.notarin.pride_craft_network.Regex;
+import com.notarin.pride_craft_network.database.Query;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
+import com.notarin.pride_craft_network.database.objects.Role;
 import org.yaml.snakeyaml.Yaml;
 import spark.Spark;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.notarin.pride_craft_network.database.Query.createAccount;
@@ -204,6 +207,38 @@ public class Routes {
                     return BuildYaml.error("User not found");
                 }
                 return BuildYaml.secret(account);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
+    static void makeRole() {
+        Spark.post("/role/:name", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String param = req.params(":name");
+                final Role role = Query.makeRole(param);
+                return BuildYaml.role(role);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
+    static void getRole() {
+        Spark.get("/role/:name", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String param = req.params(":name");
+                final Role role = Query.getRole(param);
+                return BuildYaml.role(role);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
+    static void getAllRoles() {
+        Spark.get("/roles", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final List<Role> roles = Query.getRoles();
+                return BuildYaml.roles(roles);
             } else return Main.denyTransaction(res);
         });
     }

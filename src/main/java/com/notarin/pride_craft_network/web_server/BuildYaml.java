@@ -1,11 +1,13 @@
 package com.notarin.pride_craft_network.web_server;
 
 import com.notarin.pride_craft_network.database.objects.PrideUser;
+import com.notarin.pride_craft_network.database.objects.Role;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,6 +64,46 @@ public class BuildYaml {
         {
             data.put("id", prideUser.id());
             data.put("secret", prideUser.secret());
+        }
+        map.put("data", data);
+        final Yaml yaml = Yaml();
+        return yaml.dump(map);
+    }
+
+    /**
+     * Builds a YAML response for the role object.
+     *
+     * @param role The role to be sent
+     * @return The YAML response
+     */
+    public static String role(final Role role) {
+        final Map<String, Object> map = new HashMap<>();
+        final Map<String, Object> data = new HashMap<>();
+        map.put("status", "success");
+        {
+            data.put("name", role.name());
+        }
+        map.put("data", data);
+        final Yaml yaml = Yaml();
+        return yaml.dump(map);
+    }
+
+    /**
+     * Builds a YAML response of all the roles.
+     *
+     * @param roles The roles to be sent
+     * @return The YAML response
+     */
+    public static String roles(final List<Role> roles) {
+        final Map<String, Object> map = new HashMap<>();
+        final Map<String, Object> data = new HashMap<>();
+        final Map<String, Object> rolesMap = new HashMap<>();
+        for (final Role role : roles) {
+            rolesMap.put(role.name(), role.name());
+        }
+        map.put("status", "success");
+        {
+            data.put("roles", rolesMap);
         }
         map.put("data", data);
         final Yaml yaml = Yaml();
