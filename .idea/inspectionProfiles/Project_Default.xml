@@ -19,6 +19,7 @@
       <option name="m_minLength" value="1" />
       <option name="m_maxLength" value="200" />
     </inspection_tool>
+    <inspection_tool class="LongLine" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MissingDeprecatedAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MissingJavadoc" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MissortedModifiers" enabled="true" level="WARNING" enabled_by_default="true">
