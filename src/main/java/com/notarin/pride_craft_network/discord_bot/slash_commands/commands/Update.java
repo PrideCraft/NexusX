@@ -9,7 +9,6 @@ import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.IOException;
 import java.util.Map;
@@ -44,13 +43,7 @@ public class Update implements SlashCommandHandler {
                 final PullCommand gitPull = botGit.pull()
                         .setRemote("origin")
                         .setRemoteBranchName("main")
-                        .setRebase(true)
-                        .setCredentialsProvider(
-                                new UsernamePasswordCredentialsProvider(
-                                        config.get("username").toString(),
-                                        config.get("personal-access-token")
-                                                .toString())
-                        );
+                        .setRebase(true);
                 gitPull.call();
                 event.reply("Finished!").setEphemeral(true).queue();
             } catch (@SuppressWarnings("OverlyBroadCatchBlock")
