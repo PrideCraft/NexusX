@@ -1,12 +1,14 @@
 package com.notarin.pride_craft_network.database;
 
 import com.notarin.pride_craft_network.database.objects.PrideUser;
+import com.notarin.pride_craft_network.database.objects.Role;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.exceptions.NoSuchRecordException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +175,71 @@ public class Query {
             return true;
         } catch (final NoSuchRecordException e) {
             return false;
+        }
+    }
+
+    /**
+     * Creates a new role.
+     *
+     * @param name The name of the role
+     * @return The role
+     */
+    public static Role makeRole(final String name) {
+        final String query = """
+                CREATE (role:Role {name: $name})
+                RETURN role
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            return Util.parseRoleFromRecord(record);
+        }
+    }
+
+    /**
+     * Gets a role from the database.
+     *
+     * @param name The name of the role
+     * @return The role
+     */
+    public static Role getRole(final String name) {
+        final String query = """
+                MATCH (role:Role {name: $name})
+                RETURN role
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            return Util.parseRoleFromRecord(record);
+        }
+    }
+
+    /**
+     * Gets all roles.
+     *
+     * @return A list of all roles
+     */
+    public static List<Role> getRoles() {
+        final String query = """
+                MATCH (role:Role)
+                RETURN role
+                """;
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query);
+            final List<Record> records = run.list();
+            final List<Role> roles = new ArrayList<>();
+            for (final Record record : records) {
+                final Role role = Util.parseRoleFromRecord(record);
+                roles.add(role);
+            }
+            return roles;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.notarin.pride_craft_network.database;
 
 import com.notarin.pride_craft_network.database.objects.PrideUser;
+import com.notarin.pride_craft_network.database.objects.Role;
 import org.jetbrains.annotations.NotNull;
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Config;
@@ -135,6 +136,20 @@ public class Util {
                 minecraftUuid,
                 discordId,
                 secret
+        );
+    }
+
+    static Role parseRoleFromRecord(final Record record) {
+        String name = null;
+        for (final Value value : record.values()) {
+            final boolean node = value.type().name().equals("NODE");
+            if (node && value.asNode().hasLabel("Role")) {
+                final Value unParsedName = value.asNode().get("name");
+                name = unParsedName.asString();
+            }
+        }
+        return new Role(
+                name
         );
     }
 }
