@@ -18,6 +18,7 @@ import static com.notarin.pride_craft_network.database.Query.linkUUIDQuery;
  * The routes class for the web server.
  * This class contains all the routes for the web server.
  */
+@SuppressWarnings("unused")
 public class Routes {
     /**
      * This route is used to create an account from a Minecraft UUID.
@@ -123,7 +124,8 @@ public class Routes {
             final Map<String, Object> map = yaml.load(body);
             final String prideId = (String) map.get("Pride-ID");
             final String uuid = (String) map.get("UUID");
-            final String discordId = map.get("Discord-ID") != null ? ((Long) map.get("Discord-ID")).toString() : null;
+            final String discordId = map.get("Discord-ID") != null ?
+                    ((Long) map.get("Discord-ID")).toString() : null;
             final PrideUser account = getAccount(prideId);
 
             // Check if the body is valid
