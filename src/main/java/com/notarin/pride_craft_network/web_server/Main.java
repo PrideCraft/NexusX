@@ -6,6 +6,8 @@ import spark.Request;
 import spark.Response;
 import spark.Spark;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -40,14 +42,18 @@ public class Main {
     }
 
     private static void defineServerPaths() {
-        Routes.ping();
-        Routes.makeUserFromMinecraftUuid();
-        Routes.makeUserFromDiscordId();
-        Routes.getUser();
-        Routes.getUserFromMinecraftUuid();
-        Routes.getUserFromDiscordId();
-        Routes.linkAccount();
-        Routes.getSecret();
+        final Class<?> clazz = Routes.class;
+        final Method[] methods = clazz.getDeclaredMethods();
+
+        for (final Method method : methods) {
+            try {
+                method.invoke(Routes.class);
+            } catch (
+                    final IllegalAccessException |
+                          InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     static String getUserByPrideId(final Response res, final String id) {
@@ -88,7 +94,8 @@ public class Main {
         try {
             port = (Integer) config.get("port");
         } catch (final ClassCastException e) {
-            logWarn("WebServer", "Invalid port in config.yml, defaulting to 8080");
+            logWarn("WebServer",
+                    "Invalid port in config.yml, defaulting to 8080");
             return 8080;
         }
         return port;
