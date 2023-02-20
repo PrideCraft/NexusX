@@ -243,4 +243,28 @@ public class Query {
         }
     }
 
+    /**
+     * Sets a role as a child of another role.
+     * This means that that parent role had administrative privileges over the
+     * child role.
+     * @param child The child role
+     * @param parent The parent role
+     * @return The child role
+     */
+    public static Role childRole(final Role child, final Role parent) {
+        final String query = """
+                MATCH (child:Role {name: $child})
+                MATCH (parent:Role {name: $parent})
+                CREATE (child)-[r1:PROMOTES_TO {since: datetime()}]->(parent)
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("child", child.name());
+        params.put("parent", parent.name());
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            session.run(query, params);
+            return getRole(child.name());
+        }
+    }
+
 }

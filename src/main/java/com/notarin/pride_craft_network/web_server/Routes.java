@@ -243,6 +243,30 @@ public class Routes {
         });
     }
 
+    static void childARole() {
+        Spark.put("/role/link-roles/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String body = req.body();
+                final Yaml yaml = new Yaml();
+                final Map<String, Object> map = yaml.load(body);
+                final Role parentRole;
+                final Role childRole;
+                try {
+                    final String parent = (String) map.get("ParentRole");
+                    final String child = (String) map.get("Role");
+                    parentRole = Query.getRole(parent);
+                    childRole = Query.getRole(child);
+                } catch (final RuntimeException e) {
+                    res.status(400);
+                    return BuildYaml.error("Invalid body");
+                }
+                final Role result = Query.childRole(childRole, parentRole);
+                return BuildYaml.role(result);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
     /**
      * This route pings the server to check if it is online.
      */
