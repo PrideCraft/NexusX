@@ -110,6 +110,24 @@ public class BuildYaml {
         return yaml.dump(map);
     }
 
+    /**
+     * Builds a YAML response for a boolean.
+     *
+     * @param booleanResponse The boolean to be sent
+     * @return The YAML response
+     */
+    public static String booleanResponse(final boolean booleanResponse) {
+        final Map<String, Object> map = new HashMap<>();
+        final Map<String, Object> data = new HashMap<>();
+        map.put("status", "success");
+        {
+            data.put("boolean", booleanResponse);
+        }
+        map.put("data", data);
+        final Yaml yaml = Yaml();
+        return yaml.dump(map);
+    }
+
     @NotNull
     private static Yaml Yaml() {
         final DumperOptions options = new DumperOptions();

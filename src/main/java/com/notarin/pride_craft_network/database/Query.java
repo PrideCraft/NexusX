@@ -267,4 +267,33 @@ public class Query {
         }
     }
 
+    /**
+     * Checks to see if the user has the PROMOTES_TO in reverse relationship
+     * with the other user or if it has it in multiple steps.
+     * @param admin The admin role
+     * @param user The user role
+     * @return Whether the user is an administrator
+     */
+    public static Boolean
+    checkAdministrator(final Role admin, final Role user) {
+        final String query = """
+                MATCH\s
+                (admin:Role {name: $admin})
+                <-[:PROMOTES_TO*]-
+                (user:Role {name: $user})
+                RETURN EXISTS((admin)<-[:PROMOTES_TO*]-(user)) AS path_exists
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("admin", admin.name());
+        params.put("user", user.name());
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            return record.get("path_exists").asBoolean();
+        } catch (final NoSuchRecordException e) {
+            return false;
+        }
+    }
+
 }
