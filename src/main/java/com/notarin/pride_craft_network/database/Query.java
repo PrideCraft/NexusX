@@ -268,6 +268,30 @@ public class Query {
     }
 
     /**
+     * Removes a role as a child of another role.
+     *
+     * @param child The child role
+     * @param parent The parent role
+     * @return The child role
+     */
+    public static Role unChildRole(final Role child, final Role parent) {
+        final String query = """
+                MATCH (child:Role {name: $child})
+                MATCH (parent:Role {name: $parent})
+                MATCH (child)-[r1:PROMOTES_TO]->(parent)
+                DELETE r1
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("child", child.name());
+        params.put("parent", parent.name());
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            session.run(query, params);
+            return getRole(child.name());
+        }
+    }
+
+    /**
      * Checks to see if the user has the PROMOTES_TO in reverse relationship
      * with the other user or if it has it in multiple steps.
      * @param admin The admin role
