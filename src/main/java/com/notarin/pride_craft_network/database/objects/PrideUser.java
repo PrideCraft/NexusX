@@ -12,6 +12,7 @@ public record PrideUser(
         String id,
         String minecraftUuid,
         String discordId,
-        String secret
+        String secret,
+        Role role
 ) {
 }

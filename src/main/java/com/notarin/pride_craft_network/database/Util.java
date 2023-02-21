@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logError;
+import static com.notarin.pride_craft_network.database.Query.getUserRole;
 
 /**
  * This class contains utility methods for database related tasks.
@@ -131,12 +132,8 @@ public class Util {
                 discordId = name.asString();
             }
         }
-        return new PrideUser(
-                prideId,
-                minecraftUuid,
-                discordId,
-                secret
-        );
+        final Role role = getUserRole(prideId);
+        return new PrideUser(prideId, minecraftUuid, discordId, secret, role);
     }
 
     static Role parseRoleFromRecord(final Record record) {
