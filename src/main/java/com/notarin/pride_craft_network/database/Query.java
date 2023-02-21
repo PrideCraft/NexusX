@@ -217,6 +217,8 @@ public class Query {
             final Result run = session.run(query, params);
             final Record record = run.single();
             return Util.parseRoleFromRecord(record);
+        } catch (final NoSuchRecordException e) {
+            return null;
         }
     }
 
@@ -317,6 +319,51 @@ public class Query {
             return record.get("path_exists").asBoolean();
         } catch (final NoSuchRecordException e) {
             return false;
+        }
+    }
+
+    /**
+     * Sets the role of a user.
+     *
+     * @param user The user
+     * @param role The role
+     * @return The user
+     */
+    public static PrideUser setUserRole(final PrideUser user, final Role role) {
+        final String query = """
+                MATCH (account:PrideAccount {name: $id})
+                MATCH (role:Role {name: $role})
+                CREATE (account)-[r1:IS_ROLE {since: datetime()}]->(role)
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("id", user.id());
+        params.put("role", role.name());
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            session.run(query, params);
+            return getAccount(user.id());
+        }
+    }
+
+    /**
+     * Unsets the role of a user.
+     *
+     * @param user The user
+     * @return The user
+     */
+    public static PrideUser unsetUserRole(final PrideUser user) {
+        final String query = """
+                MATCH (account:PrideAccount {name: $id})
+                MATCH (role:Role)
+                MATCH (account)-[r1:IS_ROLE]->(role)
+                DELETE r1
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("id", user.id());
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            session.run(query, params);
+            return getAccount(user.id());
         }
     }
 
