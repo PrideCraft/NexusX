@@ -39,7 +39,8 @@ public class Main extends ListenerAdapter {
                 .createDefault((String) config.get("token"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT);
         final JDA jda = jdabuilder.build();
-        final List<Class<?>> slashCommands = SlashCommandRegistrar.loadCommands();
+        final List<Class<?>> slashCommands =
+                SlashCommandRegistrar.loadCommands();
         jda.addEventListener(new EventRegistrar(slashCommands));
 
         //register the slash commands

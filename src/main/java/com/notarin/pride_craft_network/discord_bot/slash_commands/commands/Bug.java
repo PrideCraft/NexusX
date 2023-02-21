@@ -22,7 +22,8 @@ public class Bug implements SlashCommandHandler {
 
     @Override
     public void handle(final SlashCommandInteractionEvent event) {
-        final String url = "https://github.com/PrideCraft/Public-Issue-Tracker" +
+        final String url = "https://github.com" +
+                "/PrideCraft/Public-Issue-Tracker" +
                 "/issues/new/choose";
         event.reply(url).queue();
     }

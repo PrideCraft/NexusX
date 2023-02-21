@@ -75,7 +75,8 @@ public class Query {
      */
     public static PrideUser getAccountByUUID(final String uuid) {
         final String query = """
-                MATCH r=(account:PrideAccount)-->(minecraftAccount:MinecraftAccount\s
+                MATCH\s
+                r=(account:PrideAccount)-->(minecraftAccount:MinecraftAccount\s
                 {name: $UUID})\s
                 RETURN r, account""";
         final Map<String, Object> params = new HashMap<>();
@@ -99,7 +100,8 @@ public class Query {
      */
     public static PrideUser getAccountByDiscordId(final String discordId) {
         final String query = """
-                MATCH r=(account:PrideAccount)-->(discordAccount:DiscordAccount\s
+                MATCH\s
+                r=(account:PrideAccount)-->(discordAccount:DiscordAccount\s
                 {name: $DiscordId})\s
                 RETURN account""";
         final Map<String, Object> params = new HashMap<>();
@@ -137,7 +139,10 @@ public class Query {
                 MATCH (account:PrideAccount {name: $id})
                 MERGE (minecraftAccount:MinecraftAccount\s
                 {name: $UUID})
-                CREATE (account)-[r1:OWNS {since: datetime()}]->(minecraftAccount)
+                CREATE\s
+                (account)
+                -[r1:OWNS {since: datetime()}]->
+                (minecraftAccount)
                 """;
         final Map<String, Object> params = new HashMap<>();
         params.put("id", account.id());

@@ -32,7 +32,9 @@ public class SlashCommandRegistrar {
      * @throws IllegalAccessException Thrown when registering slash commands
      * fails
      */
-    public static void register(final JDA jda, final List<Class<?>> commandClasses) throws
+    public static void register(
+            final JDA jda,
+            final List<Class<?>> commandClasses) throws
             NoSuchMethodException, InvocationTargetException,
             InstantiationException, IllegalAccessException {
         final CommandListUpdateAction updateCommands;
