@@ -285,6 +285,14 @@ public class Routes {
                     res.status(400);
                     return BuildYaml.error("Invalid body");
                 }
+                if (childRole == null) {
+                    res.status(400);
+                    return BuildYaml.error("Child role does not exist");
+                }
+                if (parentRole == null) {
+                    res.status(400);
+                    return BuildYaml.error("Parent role does not exist");
+                }
                 final Role result = Query.unChildRole(childRole, parentRole);
                 return BuildYaml.role(result);
             } else return Main.denyTransaction(res);
