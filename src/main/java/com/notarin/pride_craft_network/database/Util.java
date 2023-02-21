@@ -1,5 +1,6 @@
 package com.notarin.pride_craft_network.database;
 
+import com.notarin.pride_craft_network.database.objects.Permissions;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import com.notarin.pride_craft_network.database.objects.Role;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,8 @@ import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -139,15 +142,40 @@ public class Util {
 
     static Role parseRoleFromRecord(final Record record) {
         String name = null;
+        Permissions permissions = null;
         for (final Value value : record.values()) {
             final boolean node = value.type().name().equals("NODE");
             if (node && value.asNode().hasLabel("Role")) {
                 final Value unParsedName = value.asNode().get("name");
                 name = unParsedName.asString();
+                // get list of permissions from node
+                final Value unParsedPermissions =
+                        value.asNode().get("permissions");
+                permissions = parsePermissionsFromList(
+                        unParsedPermissions.toString()
+                );
             }
         }
         return new Role(
-                name
+                name,
+                permissions
         );
+    }
+
+    static Permissions parsePermissionsFromList(String permissions) {
+        // remove all brackets
+        permissions = permissions.replaceAll("\\[", "");
+        permissions = permissions.replaceAll("]", "");
+        // remove all spaces
+        permissions = permissions.replaceAll("\\s", "");
+        // remove all quotes
+        permissions = permissions.replaceAll("\"", "");
+        // convert to List split by commas
+        final List<String> permissionList =
+                Arrays.asList(permissions.split(","));
+        // set permissions
+        final boolean kick = permissionList.contains("Kick");
+
+        return new Permissions(kick);
     }
 }

@@ -6,6 +6,7 @@ package com.notarin.pride_craft_network.database.objects;
  * @param name The name of the role
  */
 public record Role(
-        String name
+        String name,
+        Permissions permissions
 ) {
 }
