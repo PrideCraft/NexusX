@@ -267,10 +267,30 @@ public class Routes {
         });
     }
 
-    /**
-     * Runs the checkAdministrator Query to check if the role is an admin of the
-     * other role.
-     */
+    static void unChildARole() {
+        Spark.put("/role/unlink-roles/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String body = req.body();
+                final Yaml yaml = new Yaml();
+                final Map<String, Object> map = yaml.load(body);
+                final Role parentRole;
+                final Role childRole;
+                try {
+                    final String parent = (String) map.get("ParentRole");
+                    final String child = (String) map.get("Role");
+                    parentRole = Query.getRole(parent);
+                    childRole = Query.getRole(child);
+                } catch (final RuntimeException e) {
+                    res.status(400);
+                    return BuildYaml.error("Invalid body");
+                }
+                final Role result = Query.unChildRole(childRole, parentRole);
+                return BuildYaml.role(result);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
     static void checkIfRoleAdmins() {
         Spark.get("/role-admins", (req, res) -> {
             res.header("Content-Type", "application/x-yaml");
