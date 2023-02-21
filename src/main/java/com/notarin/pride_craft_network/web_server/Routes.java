@@ -309,6 +309,14 @@ public class Routes {
                     res.status(400);
                     return BuildYaml.error("Invalid body");
                 }
+                if (parentRole == null) {
+                    res.status(404);
+                    return BuildYaml.error("Parent role not found");
+                }
+                if (childRole == null) {
+                    res.status(404);
+                    return BuildYaml.error("Child role not found");
+                }
                 final Boolean result = Query.checkAdministrator(parentRole,
                         childRole);
                 return BuildYaml.booleanResponse(result);
