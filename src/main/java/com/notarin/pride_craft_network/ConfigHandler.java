@@ -54,7 +54,8 @@ public class ConfigHandler {
 
         try {
             //Loading config example file
-            final InputStream inputStream = new FileInputStream("config-example.yml");
+            final InputStream inputStream =
+                    new FileInputStream("config-example.yml");
             final Yaml yaml = new Yaml();
             //set the config object
             exampleConfig = yaml.load(inputStream);
@@ -63,7 +64,8 @@ public class ConfigHandler {
         }
 
         //check for unconfigured values in config, or useless values in config
-        for (final Map.Entry<String, Object> configIteration : config.entrySet()) {
+        for (final Map.Entry<String, Object>
+                configIteration : config.entrySet()) {
             //Check for keys in config not present in exampleconfig,
             // this isn't really a problem so just warn.
             if (exampleConfig.get(configIteration.getKey()) == null) {

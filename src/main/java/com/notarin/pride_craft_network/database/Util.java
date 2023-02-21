@@ -73,7 +73,8 @@ public class Util {
     }
 
     /**
-     * Generates a random secret with a combination of uppercase letters, lowercase letters, and numbers.
+     * Generates a random secret with a combination of uppercase letters,
+     * lowercase letters, and numbers.
      *
      * @return A random secret
      */
