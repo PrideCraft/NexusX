@@ -44,6 +44,7 @@ public class BuildYaml {
             data.put("id", prideUser.id());
             data.put("minecraftUuid", prideUser.minecraftUuid());
             data.put("discordId", prideUser.discordId());
+            data.put("role", prideUser.role().name());
         }
         map.put("data", data);
         final Yaml yaml = Yaml();

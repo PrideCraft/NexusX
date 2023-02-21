@@ -367,4 +367,27 @@ public class Query {
         }
     }
 
+    /**
+     * Gets the role of a user.
+     *
+     * @param userId The user id
+     * @return The role of the user
+     */
+    public static Role getUserRole(final String userId) {
+        final String query = """
+                MATCH (account:PrideAccount {name: $id})
+                MATCH (role:Role)
+                MATCH (account)-[r1:IS_ROLE]->(role)
+                RETURN role
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("id", userId);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            return Util.parseRoleFromRecord(record);
+        }
+    }
+
 }
