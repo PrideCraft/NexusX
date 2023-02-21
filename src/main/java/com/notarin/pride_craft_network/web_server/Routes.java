@@ -228,6 +228,10 @@ public class Routes {
             if (Main.elevatedTransaction(req)) {
                 final String param = req.params(":name");
                 final Role role = Query.getRole(param);
+                if (role == null) {
+                    res.status(404);
+                    return BuildYaml.error("Role not found");
+                }
                 return BuildYaml.role(role);
             } else return Main.denyTransaction(res);
         });
