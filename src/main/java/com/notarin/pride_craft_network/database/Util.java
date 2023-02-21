@@ -162,14 +162,7 @@ public class Util {
         );
     }
 
-    static Permissions parsePermissionsFromList(String permissions) {
-        // remove all brackets
-        permissions = permissions.replaceAll("\\[", "");
-        permissions = permissions.replaceAll("]", "");
-        // remove all spaces
-        permissions = permissions.replaceAll("\\s", "");
-        // remove all quotes
-        permissions = permissions.replaceAll("\"", "");
+    static Permissions parsePermissionsFromList(final String permissions) {
         // convert to List split by commas
         final List<String> permissionList =
                 Arrays.asList(permissions.split(","));
