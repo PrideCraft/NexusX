@@ -344,6 +344,63 @@ public class Routes {
         });
     }
 
+    static void setRole() {
+        Spark.put("/user-role/set/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String body = req.body();
+                final Yaml yaml = new Yaml();
+                final Map<String, Object> map = yaml.load(body);
+                final Role role;
+                final PrideUser user;
+                try {
+                    final String roleString = (String) map.get("Role");
+                    final String userString = (String) map.get("User");
+                    role = Query.getRole(roleString);
+                    user = Query.getAccount(userString);
+                } catch (final RuntimeException e) {
+                    res.status(400);
+                    return BuildYaml.error("Invalid body");
+                }
+                if (user == null) {
+                    res.status(404);
+                    return BuildYaml.error("User not found");
+                }
+                if (role == null) {
+                    res.status(404);
+                    return BuildYaml.error("Role not found");
+                }
+                final PrideUser result = Query.setUserRole(user, role);
+                return BuildYaml.user(result);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
+    static void unsetRole() {
+        Spark.put("/user-role/unset/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String body = req.body();
+                final Yaml yaml = new Yaml();
+                final Map<String, Object> map = yaml.load(body);
+                final PrideUser user;
+                try {
+                    final String userString = (String) map.get("User");
+                    user = Query.getAccount(userString);
+                } catch (final RuntimeException e) {
+                    res.status(400);
+                    return BuildYaml.error("Invalid body");
+                }
+                if (user == null) {
+                    res.status(404);
+                    return BuildYaml.error("User not found");
+                }
+                final PrideUser result = Query.unsetUserRole(user);
+                return BuildYaml.user(result);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
     /**
      * This route pings the server to check if it is online.
      */
