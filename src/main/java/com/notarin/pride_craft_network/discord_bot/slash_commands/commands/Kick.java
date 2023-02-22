@@ -69,6 +69,10 @@ public class Kick implements SlashCommandHandler {
 
     @Override
     public void setOptions(final SlashCommandData command) {
-        command.addOption(OptionType.STRING, "user", "The user to kick", true);
+        command.addOption(
+                OptionType.MENTIONABLE,
+                "user",
+                "The user to kick",
+                true);
     }
 }
