@@ -26,6 +26,10 @@ public class Register implements SlashCommandHandler {
     public void handle(final SlashCommandInteractionEvent event) {
         try {
             final String discordId = event.getUser().getId();
+            if (Query.getAccountByDiscordId(discordId) != null) {
+                event.reply("You are already registered!").queue();
+                return;
+            }
             final PrideUser account = Query.createAccount();
             Query.linkDiscordIdQuery(account, discordId);
             event.reply("You have been registered!").queue();

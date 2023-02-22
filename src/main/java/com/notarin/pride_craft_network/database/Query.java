@@ -27,7 +27,7 @@ public class Query {
     public static PrideUser createAccount() {
         final String query = """
                 CREATE (account:PrideAccount\s
-                {name: "Pride Account", name: $id, secret: $secret})
+                {name: $id, secret: $secret})
                 RETURN account""";
         final Map<String, Object> params = new HashMap<>();
         final String generatedId = Util.generateId();
@@ -393,6 +393,8 @@ public class Query {
             final Result run = session.run(query, params);
             final Record record = run.single();
             return Util.parseRoleFromRecord(record);
+        } catch (final NoSuchRecordException e) {
+            return null;
         }
     }
 
