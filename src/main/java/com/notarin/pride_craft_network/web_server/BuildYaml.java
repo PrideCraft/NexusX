@@ -1,5 +1,6 @@
 package com.notarin.pride_craft_network.web_server;
 
+import com.notarin.pride_craft_network.database.objects.Permissions;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import com.notarin.pride_craft_network.database.objects.Role;
 import org.jetbrains.annotations.NotNull;
@@ -124,6 +125,25 @@ public class BuildYaml {
         {
             data.put("boolean", booleanResponse);
         }
+        map.put("data", data);
+        final Yaml yaml = Yaml();
+        return yaml.dump(map);
+    }
+
+    /**
+     * Builds a YAML response for the permissions object.
+     *
+     * @param permissions The permissions to be sent
+     * @return The YAML response
+     */
+    public static String permissions(final Permissions permissions) {
+        final Map<String, Object> map = new HashMap<>();
+
+        final Map<String, Boolean> permissionsMap = new HashMap<>();
+        permissionsMap.put("Kick", permissions.KICK());
+
+        map.put("status", "success");
+        final Map<String, Object> data = new HashMap<>(permissionsMap);
         map.put("data", data);
         final Yaml yaml = Yaml();
         return yaml.dump(map);
