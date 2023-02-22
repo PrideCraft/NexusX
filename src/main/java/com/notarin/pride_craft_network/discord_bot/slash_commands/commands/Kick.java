@@ -1,5 +1,6 @@
 package com.notarin.pride_craft_network.discord_bot.slash_commands.commands;
 
+import com.notarin.pride_craft_network.database.Query;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import com.notarin.pride_craft_network.discord_bot.slash_commands.SlashCommandHandler;
 import net.dv8tion.jda.api.entities.Member;
@@ -10,7 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
-import static com.notarin.pride_craft_network.database.Query.getAccountByUUID;
 import static com.notarin.pride_craft_network.database.Util.checkIfAdministratesByUser;
 
 /**
@@ -34,11 +34,11 @@ public class Kick implements SlashCommandHandler {
         try {
             final String adminId =
                     Objects.requireNonNull(event.getMember()).getUser().getId();
-            final PrideUser admin = getAccountByUUID(adminId);
+            final PrideUser admin = Query.getAccountByDiscordId(adminId);
             final String userId =
                     Objects.requireNonNull(event.getOption("user"))
                             .getAsString();
-            final PrideUser user = getAccountByUUID(userId);
+            final PrideUser user = Query.getAccountByDiscordId(userId);
             if (admin == null) {
                 event.reply("You are not registered!").queue();
                 return;
