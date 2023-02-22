@@ -1,5 +1,6 @@
 package com.notarin.pride_craft_network.database;
 
+import com.notarin.pride_craft_network.database.objects.Permissions;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import com.notarin.pride_craft_network.database.objects.Role;
 import org.neo4j.driver.Driver;
@@ -392,6 +393,104 @@ public class Query {
             final Result run = session.run(query, params);
             final Record record = run.single();
             return Util.parseRoleFromRecord(record);
+        }
+    }
+
+    /**
+     * Adds a permission to a role.
+     *
+     * @param role The role
+     * @param permission The permission to add
+     * @return The role
+     */
+    public static
+    Permissions addPermission(Role role, final String permission) {
+        final Permissions permissions = getPermissions(role);
+        String stringPermissions = "";
+        if (permissions.KICK()) {
+            stringPermissions += "Kick,";
+        }
+        if (!stringPermissions.contains(permission)) {
+            stringPermissions = stringPermissions + permission;
+        } else {
+            // Removes the last comma in the event that we don't add anything
+            stringPermissions = stringPermissions.substring(0,
+                    stringPermissions.length() - 1);
+        }
+        final String query = """
+                MATCH (role:Role {name: $role})
+                SET role.permissions = $permissions
+                RETURN role
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("role", role.name());
+        params.put("permissions", stringPermissions);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            role = Util.parseRoleFromRecord(record);
+            return role.permissions();
+        }
+    }
+
+    /**
+     * Removes a permission from a role.
+     *
+     * @param role The role
+     * @param permission The permission to remove
+     * @return The role
+     */
+    public static Permissions removePermission(Role role,
+                                               final String permission) {
+        final Permissions permissions = getPermissions(role);
+        String stringPermissions = "";
+
+        if (permissions.KICK()) stringPermissions += "Kick,";
+
+        if (stringPermissions.contains(permission)) {
+            stringPermissions = stringPermissions.replace(permission+",", "");
+        }
+        if (stringPermissions.endsWith(",")) {
+            stringPermissions = stringPermissions.substring(0,
+                    stringPermissions.length() - 1);
+        }
+        final String query = """
+                MATCH (role:Role {name: $role})
+                SET role.permissions = $permissions
+                RETURN role
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("role", role.name());
+        params.put("permissions", stringPermissions);
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            role = Util.parseRoleFromRecord(record);
+            return role.permissions();
+        }
+    }
+
+    /**
+     * Gets the permissions of a role.
+     *
+     * @param role The role
+     * @return The permissions of the role
+     */
+    public static Permissions getPermissions(Role role) {
+        final String query = """
+                MATCH (role:Role {name: $role})
+                RETURN role
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("role", role.name());
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            role = Util.parseRoleFromRecord(record);
+            return role.permissions();
         }
     }
 

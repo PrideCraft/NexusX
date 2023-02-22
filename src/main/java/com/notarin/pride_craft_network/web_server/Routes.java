@@ -2,6 +2,7 @@ package com.notarin.pride_craft_network.web_server;
 
 import com.notarin.pride_craft_network.Regex;
 import com.notarin.pride_craft_network.database.Query;
+import com.notarin.pride_craft_network.database.objects.Permissions;
 import com.notarin.pride_craft_network.database.objects.PrideUser;
 import com.notarin.pride_craft_network.database.objects.Role;
 import org.yaml.snakeyaml.Yaml;
@@ -397,6 +398,88 @@ public class Routes {
                 }
                 final PrideUser result = Query.unsetUserRole(user);
                 return BuildYaml.user(result);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
+    static void addPermission() {
+        Spark.put("/roles/permissions/add/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String body = req.body();
+                final Yaml yaml = new Yaml();
+                final Map<String, Object> map = yaml.load(body);
+                final Role role;
+                final String permission;
+                try {
+                    final String roleString = (String) map.get("Role");
+                    permission = (String) map.get("Permission");
+                    role = Query.getRole(roleString);
+                } catch (final RuntimeException e) {
+                    res.status(400);
+                    return BuildYaml.error("Invalid body");
+                }
+                if (role == null) {
+                    res.status(404);
+                    return BuildYaml.error("Role not found");
+                }
+                final Permissions result = Query
+                        .addPermission(role, permission);
+
+                return BuildYaml.permissions(result);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
+    static void getPermissions() {
+        Spark.get("/roles/permissions/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String body = req.body();
+                final Yaml yaml = new Yaml();
+                final Map<String, Object> map = yaml.load(body);
+                final Role role;
+                try {
+                    final String roleString = (String) map.get("Role");
+                    role = Query.getRole(roleString);
+                } catch (final RuntimeException e) {
+                    res.status(400);
+                    return BuildYaml.error("Invalid body");
+                }
+                if (role == null) {
+                    res.status(404);
+                    return BuildYaml.error("Role not found");
+                }
+                final Permissions result = Query.getPermissions(role);
+                return BuildYaml.permissions(result);
+            } else return Main.denyTransaction(res);
+        });
+    }
+
+    static void removePermission() {
+        Spark.put("/roles/permissions/remove/", (req, res) -> {
+            res.header("Content-Type", "application/x-yaml");
+            if (Main.elevatedTransaction(req)) {
+                final String body = req.body();
+                final Yaml yaml = new Yaml();
+                final Map<String, Object> map = yaml.load(body);
+                final Role role;
+                final String permission;
+                try {
+                    final String roleString = (String) map.get("Role");
+                    permission = (String) map.get("Permission");
+                    role = Query.getRole(roleString);
+                } catch (final RuntimeException e) {
+                    res.status(400);
+                    return BuildYaml.error("Invalid body");
+                }
+                if (role == null) {
+                    res.status(404);
+                    return BuildYaml.error("Role not found");
+                }
+                final Permissions result = Query
+                        .removePermission(role, permission);
+                return BuildYaml.permissions(result);
             } else return Main.denyTransaction(res);
         });
     }

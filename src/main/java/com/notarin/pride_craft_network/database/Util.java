@@ -148,11 +148,10 @@ public class Util {
             if (node && value.asNode().hasLabel("Role")) {
                 final Value unParsedName = value.asNode().get("name");
                 name = unParsedName.asString();
-                // get list of permissions from node
                 final Value unParsedPermissions =
                         value.asNode().get("permissions");
                 permissions = parsePermissionsFromList(
-                        unParsedPermissions.toString()
+                        unParsedPermissions.asString()
                 );
             }
         }
