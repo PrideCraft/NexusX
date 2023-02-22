@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.notarin.pride_craft_network.LogHandler.logWarn;
+
 /**
  * This class handles all the queries to the database.
  */
@@ -38,7 +40,14 @@ public class Query {
         try (final Session session = driver.session()) {
             final Result run = session.run(query, params);
             final Record record = run.single();
-            return Util.parsePrideUserFromRecord(record);
+            final PrideUser prideUser = Util.parsePrideUserFromRecord(record);
+            final Role role = getRole("User");
+            if (role != null) {
+                setUserRole(prideUser, role);
+            } else {
+                logWarn("Database", "Could not find role 'User'!");
+            }
+            return prideUser;
         }
     }
 
