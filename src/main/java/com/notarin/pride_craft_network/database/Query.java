@@ -505,4 +505,25 @@ public class Query {
         }
     }
 
+    /**
+     * Checks if a user is banned.
+     *
+     * @param user The user
+     * @return Boolean representing if the user is banned
+     */
+    public static Boolean checkBan(final PrideUser user) {
+        final String query = """
+                MATCH (account:PrideAccount {name: $id})
+                RETURN account.banned
+                """;
+        final Map<String, Object> params = new HashMap<>();
+        params.put("id", user.id());
+        final Driver driver = Util.openConnection();
+        try (final Session session = driver.session()) {
+            final Result run = session.run(query, params);
+            final Record record = run.single();
+            return record.get("account.banned").asBoolean();
+        }
+    }
+
 }

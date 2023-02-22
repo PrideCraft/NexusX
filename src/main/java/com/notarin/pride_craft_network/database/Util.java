@@ -122,6 +122,7 @@ public class Util {
         String prideId = null;
         String discordId = null;
         String secret = null;
+        boolean banned = false;
         for (final Value value : record.values()) {
             final boolean node = value.type().name().equals("NODE");
             if (node && value.asNode().hasLabel("MinecraftAccount")) {
@@ -132,13 +133,22 @@ public class Util {
                 prideId = name.asString();
                 final Value unParsedSecret = value.asNode().get("secret");
                 secret = unParsedSecret.asString();
+                final Value unParsedBan = value.asNode().get("banned");
+                banned = unParsedBan.asBoolean();
             } else if (node && value.asNode().hasLabel("DiscordAccount")) {
                 final Value name = value.asNode().get("name");
                 discordId = name.asString();
             }
         }
         final Role role = getUserRole(prideId);
-        return new PrideUser(prideId, minecraftUuid, discordId, secret, role);
+        return new PrideUser(
+                prideId,
+                minecraftUuid,
+                discordId,
+                secret,
+                role,
+                banned
+        );
     }
 
     static Role parseRoleFromRecord(final Record record) {

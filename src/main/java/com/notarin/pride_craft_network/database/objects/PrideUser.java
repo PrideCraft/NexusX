@@ -13,6 +13,7 @@ public record PrideUser(
         String minecraftUuid,
         String discordId,
         String secret,
-        Role role
+        Role role,
+        boolean banned
 ) {
 }
