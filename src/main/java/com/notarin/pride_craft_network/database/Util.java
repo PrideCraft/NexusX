@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.notarin.pride_craft_network.ConfigHandler.loadConfig;
 import static com.notarin.pride_craft_network.LogHandler.logError;
+import static com.notarin.pride_craft_network.database.Query.checkAdministrator;
 import static com.notarin.pride_craft_network.database.Query.getUserRole;
 
 /**
@@ -169,5 +170,19 @@ public class Util {
         final boolean kick = permissionList.contains("Kick");
 
         return new Permissions(kick);
+    }
+
+    /**
+     * Checks if the admin administrates the user.
+     *
+     * @param admin The admin to check
+     * @param user The user to check
+     * @return Whether the admin administrates the user
+     */
+    public static Boolean checkIfAdministratesByUser(final PrideUser admin,
+                                               final PrideUser user) {
+        final Role adminRole = admin.role();
+        final Role userRole = user.role();
+        return checkAdministrator(adminRole, userRole);
     }
 }
