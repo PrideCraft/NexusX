@@ -49,7 +49,8 @@ public class Kick implements SlashCommandHandler {
             }
             final Boolean administrates =
                     checkIfAdministratesByUser(admin, user);
-            if (!administrates) {
+            final boolean kickPermission = admin.role().permissions().KICK();
+            if (!administrates || !kickPermission) {
                 event.reply("You can't kick this user!").queue();
             } else {
                 final OptionMapping pickedUser = Objects.requireNonNull(
