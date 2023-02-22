@@ -35,6 +35,7 @@ public class Register implements SlashCommandHandler {
             event.reply("You have been registered!").queue();
         } catch (@SuppressWarnings("OverlyBroadCatchBlock") final Exception e) {
             event.reply("An error occurred!").queue();
+            throw new RuntimeException(e);
         }
     }
 
