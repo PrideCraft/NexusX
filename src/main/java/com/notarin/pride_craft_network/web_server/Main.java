@@ -50,8 +50,7 @@ public class Main {
                 method.invoke(Routes.class);
             } catch (
                     final IllegalAccessException |
-                          InvocationTargetException e) {
-                throw new RuntimeException(e);
+                          InvocationTargetException ignored) {
             }
         }
     }
