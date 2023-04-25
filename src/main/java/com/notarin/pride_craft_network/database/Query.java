@@ -45,6 +45,8 @@ public class Query {
             if (role != null) {
                 setUserRole(prideUser, role);
             } else {
+                // TODO: This seems like an unhandled case, this warning is
+                //  thrown on a freshly initialized database.
                 logWarn("Database", "Could not find role 'User'!");
             }
             return prideUser;
